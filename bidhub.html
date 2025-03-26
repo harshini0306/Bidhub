@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Left Side - Branding */
+        .left-container {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .left-container h1 {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .left-container p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .left-container .arrow-button {
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        /* Right Side - Auction Items */
+        .right-container {
+            width: 40%;
+            height: 100vh;
+            background-color: #111;
+            padding: 20px;
+            overflow-y: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .bid-item {
+            background-color: #222;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .bid-item:hover {
+            background-color: #333;
+        }
+
+        .bid-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bid-item h2 {
+            font-size: 18px;
+        }
+
+        .bid-item p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .bid-category {
+            font-size: 12px;
+            color: gray;
+            text-align: left;
+        }
+
+        /* View More Button */
+        .view-more {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .view-more:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Section -->
+    <div class="left-container">
+        <h1>BidHub</h1>
+        <p>Select an item from the list to view details and place your bid.</p>
+        <div class="arrow-button">→</div>
+    </div>
+
+    <!-- Right Section (Bidding Items) -->
+    <div class="right-container" id="bid-list">
+        <!-- Items will be added dynamically using JavaScript -->
+    </div>
+
+    <script>
+        // Product List
+        const products = [
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART" },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION" }
+        ];
+
+        // Function to render product list
+        function renderBids() {
+            const bidList = document.getElementById("bid-list");
+            products.forEach((product, index) => {
+                const item = document.createElement("div");
+                item.classList.add("bid-item");
+                item.innerHTML = `
+                    <div class="bid-details">
+                        <h2>${product.name}</h2>
+                        <p>Current Bid: ${product.bid}</p>
+                        <div class="bid-category">${product.category}</div>
+                    </div>
+                    <button class="view-more" onclick="viewMore(${index})">View More</button>
+                `;
+                bidList.appendChild(item);
+            });
+        }
+
+        // Function to show item details
+        function viewMore(index) {
+            const product = products[index];
+            alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+        }
+
+        // Load products on page load
+        renderBids();
+    </script>
+
+</body>
+</html>
