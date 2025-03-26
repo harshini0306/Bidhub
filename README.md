@@ -3,6 +3,8 @@ Overview
 BidHub is a modern online auction platform where users can browse and place bids on exclusive items. The platform provides detailed product pages for each item, allowing users to view complete information before bidding.
 
 Features
+
+
 🔹 Browse auction items with real-time bid prices.
 
 🔹 "View More" button on each product, leading to a detailed product page.
