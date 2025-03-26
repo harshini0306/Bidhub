@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Art Painting - BIDHUB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">BIDHUB</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Auctions</a></li>
+            <li><a href="#">How It Works</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="item-image">
+            <img id="product-img" src="https://i.pinimg.com/474x/05/bc/0e/05bc0e3d646469fded9f5398d5bf0025.jpg" alt="Modern Art Painting">
+        </div>
+        <div class="item-details">
+            <h2 id="product-name">Modern Art Painting - Abstract Series</h2>
+            <p class="location">📍 New York, USA</p>
+            <div class="time-box">
+                <p>⏳ Time Remaining</p>
+                <h3 id="countdown"></h3>
+                <p class="ends-text">Ends on 4/10/2025 at 11:59 PM</p>
+            </div>
+
+            <p class="current-bid">Current Bid: <span id="current-bid">$1,200</span></p>
+            <p>Starting Bid: <b id="starting-bid">$800</b></p>
+            <p>📜 15 bids | 🏷 Seller: <b>Artisan Gallery</b></p>
+
+            <h3>Product Features</h3>
+            <ul class="features">
+                <li>🎨 <b>Artist:</b> John Doe</li>
+                <li>🖼 <b>Medium:</b> Acrylic on Canvas</li>
+                <li>📏 <b>Size:</b> 36" x 48"</li>
+                <li>🌎 <b>Origin:</b> Handmade in Italy</li>
+            </ul>
+
+            <h3>Bid History</h3>
+            <ul class="bid-history" id="bid-history">
+                <li>💰 $1,200 - UserA (30 mins ago)</li>
+                <li>💰 $1,100 - UserB (2 hours ago)</li>
+                <li>💰 $1,000 - UserC (5 hours ago)</li>
+            </ul>
+
+            <label>Your Bid Amount</label>
+            <input type="number" id="bidInput" placeholder="Enter your bid">
+            <button onclick="placeBid()">Place Bid</button>
+        </div>
+    </div>
+
+    <script>
+        function countdown() {
+            let endDate = new Date("April 10, 2025 23:59:59").getTime();
+            setInterval(function() {
+                let now = new Date().getTime();
+                let timeLeft = endDate - now;
+                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
+            }, 1000);
+        }
+        countdown();
+
+        function placeBid() {
+            let bidAmount = parseInt(document.getElementById("bidInput").value);
+            let currentBidElement = document.getElementById("current-bid");
+            let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
+            let bidHistory = document.getElementById("bid-history");
+
+            if (isNaN(bidAmount) || bidAmount <= currentBid) {
+                alert("⚠️ Your bid must be higher than $" + currentBid);
+                return;
+            }
+
+            // Update current bid
+            currentBidElement.innerText = "$" + bidAmount;
+
+            // Add new bid to history
+            let newBid = document.createElement("li");
+            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
+            bidHistory.prepend(newBid); // Add new bid at the top
+
+            alert("✅ Bid placed successfully!");
+        }
+    </script>
+</body>
+</html>
