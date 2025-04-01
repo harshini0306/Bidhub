@@ -1,0 +1,138 @@
+/* General */
+body {
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+#item-list {
+    display: flex;
+    flex-wrap: wrap;  /* Allows items to wrap to the next line */
+    gap: 20px;  /* Adds spacing between items */
+    justify-content: flex-start; /* Aligns items to the left */
+}
+
+.item {
+    width: calc(50% - 20px); /* Ensures two items per row */
+    box-sizing: border-box;
+}
+
+/* Force next row after Designer Chair */
+.row-break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(to right, #3c0446, #690c7e, #3c0446); /* Dark sides, light center */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px; /* Bigger text */
+    font-weight: bold;
+    color: white;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Auction List */
+.heading {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#item-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.item {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 300px;
+    text-align: center;
+}
+
+.item:hover {
+    background: #333;
+}
+
+/* Item Images */
+.item-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Item Details */
+.container {
+    display: flex;
+    gap: 20px;
+    margin: 30px auto;
+    max-width: 900px;
+}
+
+.item-image {
+    width: 50%;
+}
+
+.item-image img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.item-details {
+    width: 50%;
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Features & Bid History */
+.features, .bid-history {
+    background: #292929;
+    padding: 10px;
+    border-radius: 5px;
+    list-style: none;
+}
+
+.features li, .bid-history li {
+    margin-bottom: 5px;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    background: #A855F7;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #9333ea;
+}
