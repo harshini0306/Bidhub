@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BidHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .login-container {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .role-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .role-options button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            background-color: #444;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .role-options button:hover {
+            background-color: #666;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #444;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>BidHub Login</h1>
+
+        <div class="role-options">
+            <button onclick="setRole('bidder')">Login as Bidder</button>
+            <button onclick="setRole('seller')">Login as Seller</button>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <button class="submit-btn" onclick="login()">Login</button>
+
+        <div class="footer">
+            <p>Don't have an account? <a href="#">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script>
+        let userRole = '';
+
+        function setRole(role) {
+            userRole = role;
+            alert(`You selected ${role} role.`);
+        }
+
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                alert("⚠️ Please fill in both email and password.");
+                return;
+            }
+
+            if (userRole === '') {
+                alert("⚠️ Please select a role (Bidder or Seller).");
+                return;
+            }
+
+            // Normally, this is where you would send the credentials to the server
+            // For now, we simulate a successful login
+            alert(`Login successful as ${userRole}!`);
+            // Redirect to the appropriate page based on the role
+            if (userRole === 'bidder') {
+                window.location.href = "bidder-dashboard.html"; // Redirect to bidder dashboard
+            } else if (userRole === 'seller') {
+                window.location.href = "seller-dashboard.html"; // Redirect to seller dashboard
+            }
+        }
+    </script>
+
+</body>
+</html>
