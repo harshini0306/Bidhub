@@ -138,7 +138,7 @@
         <button class="submit-btn" onclick="login()">Login</button>
 
         <div class="footer">
-            <p>Don't have an account? <a href="#">Sign Up</a></p>
+            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
         </div>
     </div>
 
@@ -164,15 +164,11 @@
                 return;
             }
 
-            // Normally, this is where you would send the credentials to the server
-            // For now, we simulate a successful login
+            // Simulate a successful login
             alert(`Login successful as ${userRole}!`);
-            // Redirect to the appropriate page based on the role
-            if (userRole === 'bidder') {
-                window.location.href = "bidder-dashboard.html"; // Redirect to bidder dashboard
-            } else if (userRole === 'seller') {
-                window.location.href = "seller-dashboard.html"; // Redirect to seller dashboard
-            }
+
+            // Redirect to index.html after login
+            window.location.href = "index.html"; 
         }
     </script>
 
