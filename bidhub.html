@@ -22,7 +22,6 @@
             overflow: hidden;
         }
 
-        /* Left Side - Branding */
         .left-container {
             width: 60%;
             display: flex;
@@ -54,7 +53,6 @@
             cursor: pointer;
         }
 
-        /* Right Side - Auction Items */
         .right-container {
             width: 40%;
             height: 100vh;
@@ -101,7 +99,6 @@
             text-align: left;
         }
 
-        /* View More Button */
         .view-more {
             background-color: #444;
             color: white;
@@ -119,20 +116,16 @@
 </head>
 <body>
 
-    <!-- Left Section -->
     <div class="left-container">
         <h1>BidHub</h1>
         <p>Select an item from the list to view details and place your bid.</p>
         <div class="arrow-button">→</div>
     </div>
 
-    <!-- Right Section (Bidding Items) -->
     <div class="right-container" id="bid-list">
-        <!-- Items will be added dynamically using JavaScript -->
     </div>
 
     <script>
-        // Product List
         const products = [
             { name: "Designer Chair", bid: "$750", category: "FURNITURE" },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS" },
@@ -146,7 +139,6 @@
             { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION" }
         ];
 
-        // Function to render product list
         function renderBids() {
             const bidList = document.getElementById("bid-list");
             products.forEach((product, index) => {
@@ -164,13 +156,15 @@
             });
         }
 
-        // Function to show item details
         function viewMore(index) {
             const product = products[index];
-            alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+            if (product.name === "Designer Chair") {
+                window.location.href = "designer-chair.html";
+            } else {
+                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+            }
         }
 
-        // Load products on page load
         renderBids();
     </script>
 
