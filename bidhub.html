@@ -127,15 +127,15 @@
 
     <script>
         const products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS" },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR" },
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
             { name: "Designer Handbag", bid: "$1,700", category: "FASHION" },
             { name: "Rare Book Collection", bid: "$950", category: "BOOKS" },
             { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS" },
-            { name: "Luxury Watch", bid: "$3,500", category: "FASHION" },
-            { name: "Antique Painting", bid: "$5,200", category: "ART" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
             { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION" }
         ];
 
@@ -158,8 +158,8 @@
 
         function viewMore(index) {
             const product = products[index];
-            if (product.name === "Designer Chair") {
-                window.location.href = "designer-chair.html";
+            if (product.file) {
+                window.location.href = product.file;
             } else {
                 alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
             }
