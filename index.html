@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BidHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            background-color: #1a1a1a;
+            background-color: black;
             color: white;
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             height: 100vh;
             overflow: hidden;
@@ -29,57 +29,45 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px;
         }
 
         .left-container h1 {
-            font-size: 60px;
-            font-weight: 600;
-            color: #ff7f50;
+            font-size: 50px;
+            font-weight: bold;
         }
 
         .left-container p {
-            font-size: 18px;
+            font-size: 16px;
             margin-top: 10px;
-            color: #ccc;
         }
 
         .left-container .arrow-button {
-            margin-top: 30px;
-            width: 50px;
-            height: 50px;
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            border: 2px solid #ff7f50;
-            color: #ff7f50;
-            font-size: 24px;
+            border: 2px solid white;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .left-container .arrow-button:hover {
-            background-color: #ff7f50;
-            color: white;
         }
 
         .right-container {
             width: 40%;
             height: 100vh;
             background-color: #111;
-            padding: 30px;
+            padding: 20px;
             overflow-y: auto;
             position: absolute;
             right: 0;
             top: 0;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
         }
 
         .bid-item {
             background-color: #222;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
@@ -89,7 +77,6 @@
 
         .bid-item:hover {
             background-color: #333;
-            transform: translateY(-5px);
         }
 
         .bid-details {
@@ -98,9 +85,7 @@
         }
 
         .bid-item h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 18px;
         }
 
         .bid-item p {
@@ -110,31 +95,22 @@
 
         .bid-category {
             font-size: 12px;
-            color: #ff7f50;
-            font-weight: 600;
-            margin-top: 5px;
+            color: gray;
+            text-align: left;
         }
 
         .view-more {
-            background-color: #ff7f50;
+            background-color: #444;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             border-radius: 5px;
             transition: 0.3s;
-            font-size: 14px;
         }
 
         .view-more:hover {
-            background-color: #e76f4f;
-            transform: scale(1.05);
-        }
-
-        /* Add icons for categories */
-        .bid-category::before {
-            content: "🔹";
-            margin-right: 5px;
+            background-color: #666;
         }
     </style>
 </head>
@@ -154,7 +130,7 @@
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
             { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-pottery.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
             { name: "Designer Handbag", bid: "$1,700", category: "FASHION" },
             { name: "Rare Book Collection", bid: "$950", category: "BOOKS" },
             { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS" },
@@ -168,14 +144,14 @@
             products.forEach((product, index) => {
                 const item = document.createElement("div");
                 item.classList.add("bid-item");
-                item.innerHTML = `
+                item.innerHTML = 
                     <div class="bid-details">
                         <h2>${product.name}</h2>
                         <p>Current Bid: ${product.bid}</p>
                         <div class="bid-category">${product.category}</div>
                     </div>
                     <button class="view-more" onclick="viewMore(${index})">View More</button>
-                `;
+                ;
                 bidList.appendChild(item);
             });
         }
@@ -185,7 +161,7 @@
             if (product.file) {
                 window.location.href = product.file;
             } else {
-                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+                alert(📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category});
             }
         }
 
