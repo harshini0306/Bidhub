@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer Chair - BIDHUB</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,7 +12,7 @@
         <div class="logo">BIDHUB</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Auctions</a></li>
+            <li><a href="#" id="downloadReport">Auctions</a></li>
             <li><a href="#">How It Works</a></li>
         </ul>
     </nav>
@@ -78,15 +79,36 @@
                 return;
             }
 
-            // Update current bid
             currentBidElement.innerText = "$" + bidAmount;
 
-            // Add new bid to history
             let newBid = document.createElement("li");
             newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid); // Add new bid at the top
+            bidHistory.prepend(newBid);
 
             alert("✅ Bid placed successfully!");
+        }
+
+        document.getElementById("downloadReport").addEventListener("click", function () {
+            generateExcelReport();
+        });
+
+        function generateExcelReport() {
+            let bidHistoryList = document.querySelectorAll("#bid-history li");
+            let data = [["Bidder", "Bid Amount", "Item Name", "Date"]];
+
+            bidHistoryList.forEach((bid) => {
+                let bidText = bid.innerText.replace("💰 ", "").split(" - ");
+                let amount = bidText[0];
+                let bidder = bidText[1];
+                let date = new Date().toISOString().split("T")[0];
+                data.push([bidder, amount, "Luxury Designer Chair", date]);
+            });
+
+            let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Auction Report");
+
+            XLSX.writeFile(wb, "Auction_Report.xlsx");
         }
     </script>
 </body>
