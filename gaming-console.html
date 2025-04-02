@@ -11,7 +11,7 @@
         <div class="logo">BIDHUB</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Auctions</a></li>
+            <li><a href="#" onclick="downloadBidHistory()">Download Bidding History</a></li>
             <li><a href="#">How It Works</a></li>
         </ul>
     </nav>
@@ -84,9 +84,21 @@
             // Add new bid to history
             let newBid = document.createElement("li");
             newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid); // Add new bid at the top
+            bidHistory.prepend(newBid);
 
             alert("✅ Bid placed successfully!");
+        }
+
+        function downloadBidHistory() {
+            let bidHistory = document.getElementById("bid-history").innerHTML;
+            let text = bidHistory.replace(/<li>/g, '').replace(/<\/li>/g, '\n');
+            let blob = new Blob([text], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "bid_history.txt";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
