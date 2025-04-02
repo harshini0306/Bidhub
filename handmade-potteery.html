@@ -51,6 +51,7 @@
             <label>Your Bid Amount</label>
             <input type="number" id="bidInput" placeholder="Enter your bid">
             <button onclick="placeBid()">Place Bid</button>
+            <button onclick="downloadBiddingHistory()">Download Bidding History</button>
         </div>
     </div>
 
@@ -87,6 +88,15 @@
             bidHistory.prepend(newBid); // Add new bid at the top
 
             alert("✅ Bid placed successfully!");
+        }
+
+        function downloadBiddingHistory() {
+            let bidHistory = document.getElementById("bid-history").innerText;
+            let blob = new Blob([bidHistory], { type: 'text/plain' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'bidding_history.txt';
+            link.click();
         }
     </script>
 </body>
