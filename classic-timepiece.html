@@ -12,7 +12,7 @@
         <div class="logo">BIDHUB</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Auctions</a></li>
+            <li><a href="#" id="downloadReport">Auctions</a></li>
             <li><a href="#">How It Works</a></li>
         </ul>
     </nav>
@@ -24,87 +24,37 @@
         <div class="item-details">
             <h2 id="product-name">Classic Rolex Timepiece</h2>
             <p class="location">📍 London, UK</p>
-            <div class="time-box">
-                <p>⏳ Time Remaining</p>
-                <h3 id="countdown"></h3>
-                <p class="ends-text">Ends on 4/15/2025 at 11:59 PM</p>
-            </div>
-
-            <p class="current-bid">Current Bid: <span id="current-bid">$5,000</span></p>
-            <p>Starting Bid: <b id="starting-bid">$3,000</b></p>
-            <p>📜 12 bids | 🏷 Seller: <b>Luxury Watches Ltd.</b></p>
-
-            <h3>Product Features</h3>
-            <ul class="features">
-                <li>⌚ <b>Brand:</b> Rolex</li>
-                <li>💎 <b>Material:</b> 18K Gold & Sapphire Crystal</li>
-                <li>⚙️ <b>Movement:</b> Swiss Automatic</li>
-                <li>🌊 <b>Water Resistance:</b> 100m</li>
-            </ul>
-
             <h3>Bid History</h3>
             <ul class="bid-history" id="bid-history">
                 <li>💰 $5,000 - UserX (10 mins ago)</li>
                 <li>💰 $4,800 - UserY (1 hour ago)</li>
                 <li>💰 $4,500 - UserZ (3 hours ago)</li>
             </ul>
-
-            <label>Your Bid Amount</label>
-            <input type="number" id="bidInput" placeholder="Enter your bid">
-            <button onclick="placeBid()">Place Bid</button>
-
-            <!-- Excel Download Button -->
-            <button id="download-report">Download Excel Report</button>
         </div>
     </div>
 
     <script>
-        function countdown() {
-            let endDate = new Date("April 15, 2025 23:59:59").getTime();
-            setInterval(function() {
-                let now = new Date().getTime();
-                let timeLeft = endDate - now;
-                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
-            }, 1000);
-        }
-        countdown();
-
-        function placeBid() {
-            let bidAmount = parseInt(document.getElementById("bidInput").value);
-            let currentBidElement = document.getElementById("current-bid");
-            let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
-            let bidHistory = document.getElementById("bid-history");
-
-            if (isNaN(bidAmount) || bidAmount <= currentBid) {
-                alert("⚠️ Your bid must be higher than $" + currentBid);
-                return;
-            }
-
-            // Update current bid
-            currentBidElement.innerText = "$" + bidAmount;
-
-            // Add new bid to history
-            let newBid = document.createElement("li");
-            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid); // Add new bid at the top
-
-            alert("✅ Bid placed successfully!");
-        }
-
-        document.getElementById("download-report").addEventListener("click", function () {
-            let productData = [
-                ["Product Name", "Current Bid", "Starting Bid", "Seller", "Location", "Time Remaining", "Bid History"],
-                ["Classic Rolex Timepiece", "$5,000", "$3,000", "Luxury Watches Ltd.", "London, UK", "Ends on 4/15/2025", 
-                 "💰 $5,000 - UserX (10 mins ago), 💰 $4,800 - UserY (1 hour ago), 💰 $4,500 - UserZ (3 hours ago)"]
-            ];
-
-            let wb = XLSX.utils.book_new();
-            let ws = XLSX.utils.aoa_to_sheet(productData);
-            XLSX.utils.book_append_sheet(wb, ws, "Product Report");
-            XLSX.writeFile(wb, "Classic_Timepiece_Report.xlsx");
+        document.getElementById("downloadReport").addEventListener("click", function () {
+            generateExcelReport();
         });
+
+        function generateExcelReport() {
+            let bidHistoryList = document.querySelectorAll("#bid-history li");
+            let data = [["Bidder", "Bid Amount", "Item Name", "Date"]];
+
+            bidHistoryList.forEach((bid) => {
+                let bidText = bid.innerText.replace("💰 ", "").split(" - ");
+                let amount = bidText[0];
+                let bidder = bidText[1];
+                let date = new Date().toISOString().split("T")[0];
+                data.push([bidder, amount, "Classic Rolex Timepiece", date]);
+            });
+
+            let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Auction Report");
+            XLSX.writeFile(wb, "Auction_Report.xlsx");
+        }
     </script>
 </body>
 </html>
