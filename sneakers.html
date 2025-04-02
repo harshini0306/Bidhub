@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneaker Auction - BIDHUB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">BIDHUB</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Auctions</a></li>
+            <li><a href="#">How It Works</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="item-image">
+            <img id="product-img" src="https://i.pinimg.com/474x/bf/4b/b0/bf4bb0ba51eca63111655b9d832e9e1c.jpg" alt="Sneaker">
+        </div>
+        <div class="item-details">
+            <h2 id="product-name">Limited Edition Air Jordan 1 Sneakers</h2>
+            <p class="location">📍 Los Angeles, USA</p>
+            <div class="time-box">
+                <p>⏳ Time Remaining</p>
+                <h3 id="countdown"></h3>
+                <p class="ends-text">Ends on 6/30/2025 at 11:59 PM</p>
+            </div>
+
+            <p class="current-bid">Current Bid: <span id="current-bid">$750</span></p>
+            <p>Starting Bid: <b id="starting-bid">$500</b></p>
+            <p>📜 25 bids | 🏷 Seller: <b>Footwear Empire</b></p>
+
+            <h3>Product Features</h3>
+            <ul class="features">
+                <li>👟 <b>Brand:</b> Air Jordan</li>
+                <li>🖤 <b>Color:</b> Black/Red</li>
+                <li>📏 <b>Size:</b> 10 US</li>
+                <li>🌟 <b>Condition:</b> Brand New</li>
+                <li>🌎 <b>Shipping:</b> Worldwide Available</li>
+            </ul>
+
+            <h3>Bid History</h3>
+            <ul class="bid-history" id="bid-history">
+                <li>💰 $750 - UserA (5 mins ago)</li>
+                <li>💰 $720 - UserB (1 hour ago)</li>
+                <li>💰 $700 - UserC (2 hours ago)</li>
+            </ul>
+
+            <label>Your Bid Amount</label>
+            <input type="number" id="bidInput" placeholder="Enter your bid">
+            <button onclick="placeBid()">Place Bid</button>
+        </div>
+    </div>
+
+    <script>
+        function countdown() {
+            let endDate = new Date("June 30, 2025 23:59:59").getTime();
+            setInterval(function() {
+                let now = new Date().getTime();
+                let timeLeft = endDate - now;
+                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
+            }, 1000);
+        }
+        countdown();
+
+        function placeBid() {
+            let bidAmount = parseInt(document.getElementById("bidInput").value);
+            let currentBidElement = document.getElementById("current-bid");
+            let currentBid = parseInt(currentBidElement.innerText.replace("$", "")); 
+            let bidHistory = document.getElementById("bid-history");
+
+            if (isNaN(bidAmount) || bidAmount <= currentBid) {
+                alert("⚠️ Your bid must be higher than $" + currentBid);
+                return;
+            }
+
+            // Update current bid
+            currentBidElement.innerText = "$" + bidAmount;
+
+            // Add new bid to history
+            let newBid = document.createElement("li");
+            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
+            bidHistory.prepend(newBid); // Add new bid at the top
+
+            alert("✅ Bid placed successfully!");
+        }
+    </script>
+</body>
+</html>

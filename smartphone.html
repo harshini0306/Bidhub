@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Auction - BIDHUB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">BIDHUB</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Auctions</a></li>
+            <li><a href="#">How It Works</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="item-image">
+            <img id="product-img" src="https://i.pinimg.com/474x/93/08/9f/93089f446b578c1bef52269e154947c0.jpg" alt="Smartphone">
+        </div>
+        <div class="item-details">
+            <h2 id="product-name">iPhone 14 Pro Max - 256GB</h2>
+            <p class="location">📍 San Francisco, USA</p>
+            <div class="time-box">
+                <p>⏳ Time Remaining</p>
+                <h3 id="countdown"></h3>
+                <p class="ends-text">Ends on 6/30/2025 at 11:59 PM</p>
+            </div>
+
+            <p class="current-bid">Current Bid: <span id="current-bid">$1,200</span></p>
+            <p>Starting Bid: <b id="starting-bid">$1,000</b></p>
+            <p>📜 50 bids | 🏷 Seller: <b>TechWorld</b></p>
+
+            <h3>Product Features</h3>
+            <ul class="features">
+                <li>📱 <b>Model:</b> iPhone 14 Pro Max</li>
+                <li>🧑‍💻 <b>Storage:</b> 256GB</li>
+                <li>📸 <b>Camera:</b> 48MP Triple Camera</li>
+                <li>🔋 <b>Battery Life:</b> Up to 20 hours</li>
+                <li>🌈 <b>Color:</b> Space Black</li>
+                <li>📶 <b>Connectivity:</b> 5G, Wi-Fi 6</li>
+            </ul>
+
+            <h3>Bid History</h3>
+            <ul class="bid-history" id="bid-history">
+                <li>💰 $1,200 - UserA (5 mins ago)</li>
+                <li>💰 $1,150 - UserB (10 mins ago)</li>
+                <li>💰 $1,100 - UserC (1 hour ago)</li>
+            </ul>
+
+            <label>Your Bid Amount</label>
+            <input type="number" id="bidInput" placeholder="Enter your bid">
+            <button onclick="placeBid()">Place Bid</button>
+        </div>
+    </div>
+
+    <script>
+        function countdown() {
+            let endDate = new Date("June 30, 2025 23:59:59").getTime();
+            setInterval(function() {
+                let now = new Date().getTime();
+                let timeLeft = endDate - now;
+                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
+            }, 1000);
+        }
+        countdown();
+
+        function placeBid() {
+            let bidAmount = parseInt(document.getElementById("bidInput").value);
+            let currentBidElement = document.getElementById("current-bid");
+            let currentBid = parseInt(currentBidElement.innerText.replace("$", "")); 
+            let bidHistory = document.getElementById("bid-history");
