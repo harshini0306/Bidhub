@@ -12,7 +12,7 @@
         <div class="logo">BIDHUB</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Auctions</a></li>
+            <li><a href="#" id="downloadReport">Auctions</a></li>
             <li><a href="#">How It Works</a></li>
         </ul>
     </nav>
@@ -82,29 +82,37 @@
                 return;
             }
 
-            // Update current bid
             currentBidElement.innerText = "$" + bidAmount;
 
-            // Add new bid to history
             let newBid = document.createElement("li");
-            newBid.innerHTML = 💰 $${bidAmount} - You (just now);
-            bidHistory.prepend(newBid); // Add new bid at the top
+            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
+            bidHistory.prepend(newBid);
 
             alert("✅ Bid placed successfully!");
         }
 
-        document.getElementById("download-report").addEventListener("click", function () {
-            let productData = [
-                ["Product Name", "Current Bid", "Starting Bid", "Seller", "Location", "Time Remaining", "Bid History"],
-                ["Classic Rolex Timepiece", "$5,000", "$3,000", "Luxury Watches Ltd.", "London, UK", "Ends on 4/15/2025", 
-                 "💰 $5,000 - UserX (10 mins ago), 💰 $4,800 - UserY (1 hour ago), 💰 $4,500 - UserZ (3 hours ago)"]
-            ];
-
-            let wb = XLSX.utils.book_new();
-            let ws = XLSX.utils.aoa_to_sheet(productData);
-            XLSX.utils.book_append_sheet(wb, ws, "Product Report");
-            XLSX.writeFile(wb, "Classic_Timepiece_Report.xlsx");
+        document.getElementById("downloadReport").addEventListener("click", function () {
+            generateExcelReport();
         });
+
+        function generateExcelReport() {
+            let bidHistoryList = document.querySelectorAll("#bid-history li");
+            let data = [["Bidder", "Bid Amount", "Item Name", "Date"]];
+
+            bidHistoryList.forEach((bid) => {
+                let bidText = bid.innerText.replace("💰 ", "").split(" - ");
+                let amount = bidText[0];
+                let bidder = bidText[1];
+                let date = new Date().toISOString().split("T")[0];
+                data.push([bidder, amount, "Classic Rolex Timepiece", date]);
+            });
+
+            let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Auction Report");
+
+            XLSX.writeFile(wb, "Auction_Report.xlsx");
+        }
     </script>
 </body>
-</html> 
+</html>
