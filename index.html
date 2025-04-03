@@ -28,9 +28,43 @@
         }
 
         .login-container {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .role-options {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: space-between;
+            margin-top: 15px;
         }
 
         button {
@@ -42,6 +76,7 @@
             cursor: pointer;
             border-radius: 5px;
             transition: 0.3s;
+            width: 48%;
         }
 
         button:hover {
@@ -52,9 +87,27 @@
 <body>
 
     <h1>Welcome to BidHub</h1>
+    
     <div class="login-container">
-        <button onclick="loginAsBidder()">Login as Bidder</button>
-        <button onclick="loginAsSeller()">Login as Seller</button>
+        <div class="input-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="role-options">
+            <button onclick="loginAsBidder()">Login as Bidder</button>
+            <button onclick="loginAsSeller()">Login as Seller</button>
+        </div>
     </div>
 
     <script>
