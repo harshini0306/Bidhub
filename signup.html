@@ -142,43 +142,11 @@
 
         <button class="submit-btn" onclick="signup()">Sign Up</button>
 
-        <div class="footer">
-            <p>Already have an account? <a href="login.html">Login</a></p>
-        </div>
     </div>
 
     <script>
-        let userRole = '';
-
-        function setRole(role) {
-            userRole = role;
-            document.getElementById("bidder-btn").classList.remove("selected");
-            document.getElementById("seller-btn").classList.remove("selected");
-            document.getElementById(role + "-btn").classList.add("selected");
-        }
-
         function signup() {
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (!name || !email || !password) {
-                alert("⚠️ Please fill in all fields.");
-                return;
-            }
-
-            if (userRole === '') {
-                alert("⚠️ Please select a role (Bidder or Seller).");
-                return;
-            }
-
-            alert(`✅ Signup successful! Redirecting to login page...`);
-            console.log("Redirecting to login page..."); // Debugging Log
-
-            // Delay the redirection to simulate smooth transition
-            setTimeout(() => {
-                window.location.href = "loginpageforbidhub.html"; // Redirect to Login Page
-            }, 1000);
+            window.location.href = "home.html"; 
         }
     </script>
 
