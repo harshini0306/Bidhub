@@ -83,6 +83,12 @@
             background-color: #666;
         }
 
+        /* Brighten the selected role */
+        .role-options button.selected {
+            background-color: #888;
+            font-weight: bold;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 10px;
@@ -121,8 +127,8 @@
         <h1>BidHub Login</h1>
 
         <div class="role-options">
-            <button onclick="setRole('bidder')">Login as Bidder</button>
-            <button onclick="setRole('seller')">Login as Seller</button>
+            <button id="bidder-btn" onclick="setRole('bidder')">Login as Bidder</button>
+            <button id="seller-btn" onclick="setRole('seller')">Login as Seller</button>
         </div>
 
         <div class="input-group">
@@ -143,11 +149,21 @@
     </div>
 
     <script>
-        let userRole = '';
+        let userRole = "";
 
         function setRole(role) {
             userRole = role;
-            alert(`You selected ${role} role.`);
+
+            // Remove "selected" class from both buttons
+            document.getElementById("bidder-btn").classList.remove("selected");
+            document.getElementById("seller-btn").classList.remove("selected");
+
+            // Add "selected" class to the clicked button
+            if (role === "bidder") {
+                document.getElementById("bidder-btn").classList.add("selected");
+            } else {
+                document.getElementById("seller-btn").classList.add("selected");
+            }
         }
 
         function login() {
@@ -159,15 +175,12 @@
                 return;
             }
 
-            if (userRole === '') {
+            if (userRole === "") {
                 alert("⚠️ Please select a role (Bidder or Seller).");
                 return;
             }
 
-            // Simulate a successful login
-            alert(`Login successful as ${userRole}!`);
-
-            // Redirect to index.html after login
+            // Redirect to home.html after login
             window.location.href = "home.html"; 
         }
     </script>
