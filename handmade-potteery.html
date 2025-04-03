@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Handmade Pottery Set - BIDHUB</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -84,18 +85,27 @@
             // Add new bid to history
             let newBid = document.createElement("li");
             newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid); // Add new bid at the top
+            bidHistory.prepend(newBid);
 
             alert("✅ Bid placed successfully!");
         }
 
         function downloadBiddingHistory() {
-            let bidHistory = document.getElementById("bid-history").innerText;
-            let blob = new Blob([bidHistory], { type: 'text/plain' });
-            let link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'bidding_history.txt';
-            link.click();
+            let bidHistoryElements = document.querySelectorAll("#bid-history li");
+            let bidData = [['Bid Amount', 'Bidder', 'Time']];
+            
+            bidHistoryElements.forEach(item => {
+                let parts = item.innerText.split(" - ");
+                let amount = parts[0].replace("💰 $", "");
+                let bidder = parts[1].split(" (")[0];
+                let time = parts[1].split(" (")[1].replace(")", "");
+                bidData.push([amount, bidder, time]);
+            });
+
+            let ws = XLSX.utils.aoa_to_sheet(bidData);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Bid History");
+            XLSX.writeFile(wb, "bidding_history.xlsx");
         }
     </script>
 </body>
