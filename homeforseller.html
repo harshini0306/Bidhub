@@ -11,7 +11,6 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-
         body {
             background-color: black;
             color: white;
@@ -21,7 +20,6 @@
             height: 100vh;
             overflow: hidden;
         }
-
         .left-container {
             width: 60%;
             display: flex;
@@ -30,29 +28,10 @@
             justify-content: center;
             text-align: center;
         }
-
         .left-container h1 {
             font-size: 50px;
             font-weight: bold;
         }
-
-        .left-container p {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        .left-container .arrow-button {
-            margin-top: 20px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-        }
-
         .right-container {
             width: 40%;
             height: 100vh;
@@ -63,7 +42,6 @@
             right: 0;
             top: 0;
         }
-
         .bid-item {
             background-color: #222;
             padding: 15px;
@@ -74,31 +52,13 @@
             align-items: center;
             transition: 0.3s;
         }
-
         .bid-item:hover {
             background-color: #333;
         }
-
         .bid-details {
             display: flex;
             flex-direction: column;
         }
-
-        .bid-item h2 {
-            font-size: 18px;
-        }
-
-        .bid-item p {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .bid-category {
-            font-size: 12px;
-            color: gray;
-            text-align: left;
-        }
-
         .view-more, .add-item {
             background-color: #444;
             color: white;
@@ -108,7 +68,6 @@
             border-radius: 5px;
             transition: 0.3s;
         }
-
         .view-more:hover, .add-item:hover {
             background-color: #666;
         }
@@ -117,15 +76,11 @@
 <body>
     <div class="left-container">
         <h1>BidHub - Seller</h1>
-        <p>Manage your items and view bids.</p>
         <button class="add-item" onclick="addNewItem()">Add New Item</button>
     </div>
-
-    <div class="right-container" id="bid-list">
-    </div>
-
+    <div class="right-container" id="bid-list"></div>
     <script>
-        let products = [
+        const products = [
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
             { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
@@ -148,7 +103,7 @@
                     <div class="bid-details">
                         <h2>${product.name}</h2>
                         <p>Current Bid: ${product.bid}</p>
-                        <div class="bid-category">${product.category}</div>
+                        <div>${product.category}</div>
                     </div>
                     <button class="view-more" onclick="viewMore(${index})">View More</button>
                 `;
@@ -156,25 +111,24 @@
             });
         }
 
-        function viewMore(index) {
-            const product = products[index];
-            if (product.file) {
-                window.location.href = product.file;
-            } else {
-                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
-            }
-        }
-
         function addNewItem() {
-            const name = prompt("Enter Item Name:");
-            const bid = prompt("Enter Starting Bid:");
-            const category = prompt("Enter Category:");
-            if (name && bid && category) {
-                products.push({ name, bid, category, file: "" });
+            let name = prompt("Enter item name:");
+            let bid = prompt("Enter starting bid amount:");
+            let category = prompt("Enter item category:");
+            let description = prompt("Enter item description:");
+            let image = prompt("Enter image URL:");
+            
+            if (name && bid && category && description && image) {
+                products.push({ name, bid, category, description, image });
                 renderBids();
             } else {
                 alert("All fields are required!");
             }
+        }
+
+        function viewMore(index) {
+            const product = products[index];
+            alert(`📌 Name: ${product.name}\n💰 Current Bid: ${product.bid}\n🏷 Category: ${product.category}\n📖 Description: ${product.description || "No details available"}`);
         }
 
         renderBids();
