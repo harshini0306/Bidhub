@@ -11,6 +11,7 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+
         body {
             background-color: black;
             color: white;
@@ -20,6 +21,7 @@
             height: 100vh;
             overflow: hidden;
         }
+
         .left-container {
             width: 60%;
             display: flex;
@@ -28,10 +30,29 @@
             justify-content: center;
             text-align: center;
         }
+
         .left-container h1 {
             font-size: 50px;
             font-weight: bold;
         }
+
+        .left-container p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .left-container .arrow-button {
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
         .right-container {
             width: 40%;
             height: 100vh;
@@ -42,6 +63,7 @@
             right: 0;
             top: 0;
         }
+
         .bid-item {
             background-color: #222;
             padding: 15px;
@@ -52,13 +74,32 @@
             align-items: center;
             transition: 0.3s;
         }
+
         .bid-item:hover {
             background-color: #333;
         }
-        .add-item-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+
+        .bid-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bid-item h2 {
+            font-size: 18px;
+        }
+
+        .bid-item p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .bid-category {
+            font-size: 12px;
+            color: gray;
+            text-align: left;
+        }
+
+        .view-more, .add-item {
             background-color: #444;
             color: white;
             border: none;
@@ -67,7 +108,8 @@
             border-radius: 5px;
             transition: 0.3s;
         }
-        .add-item-btn:hover {
+
+        .view-more:hover, .add-item:hover {
             background-color: #666;
         }
     </style>
@@ -75,46 +117,66 @@
 <body>
     <div class="left-container">
         <h1>BidHub - Seller</h1>
-        <p>Manage your items and track bids.</p>
+        <p>Manage your items and view bids.</p>
+        <button class="add-item" onclick="addNewItem()">Add New Item</button>
     </div>
+
     <div class="right-container" id="bid-list">
-        <button class="add-item-btn" onclick="addNewItem()">Add New Item</button>
     </div>
+
     <script>
         let products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS" }
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
         ];
+
         function renderBids() {
             const bidList = document.getElementById("bid-list");
-            bidList.innerHTML = '<button class="add-item-btn" onclick="addNewItem()">Add New Item</button>';
+            bidList.innerHTML = "";
             products.forEach((product, index) => {
                 const item = document.createElement("div");
                 item.classList.add("bid-item");
                 item.innerHTML = `
-                    <div>
+                    <div class="bid-details">
                         <h2>${product.name}</h2>
                         <p>Current Bid: ${product.bid}</p>
-                        <div>${product.category}</div>
+                        <div class="bid-category">${product.category}</div>
                     </div>
+                    <button class="view-more" onclick="viewMore(${index})">View More</button>
                 `;
                 bidList.appendChild(item);
             });
         }
+
+        function viewMore(index) {
+            const product = products[index];
+            if (product.file) {
+                window.location.href = product.file;
+            } else {
+                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+            }
+        }
+
         function addNewItem() {
             const name = prompt("Enter Item Name:");
-            const location = prompt("Enter Item Location:");
-            const endTime = prompt("Enter Auction End Time:");
-            const startingBid = prompt("Enter Starting Bid:");
-            const seller = prompt("Enter Seller Name:");
+            const bid = prompt("Enter Starting Bid:");
             const category = prompt("Enter Category:");
-            if (name && location && endTime && currentBid && startingBid && seller && category) {
-                products.push({ name, bid: `$${currentBid}`, category });
+            if (name && bid && category) {
+                products.push({ name, bid, category, file: "" });
                 renderBids();
             } else {
                 alert("All fields are required!");
             }
         }
+
         renderBids();
     </script>
 </body>
