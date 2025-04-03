@@ -98,21 +98,6 @@
         .submit-btn:hover {
             background-color: #666;
         }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -141,12 +126,29 @@
         </div>
 
         <button class="submit-btn" onclick="signup()">Sign Up</button>
-
     </div>
 
     <script>
+        let selectedRole = "";
+
+        function setRole(role) {
+            selectedRole = role;
+            document.getElementById("bidder-btn").classList.remove("selected");
+            document.getElementById("seller-btn").classList.remove("selected");
+            
+            if (role === "bidder") {
+                document.getElementById("bidder-btn").classList.add("selected");
+            } else {
+                document.getElementById("seller-btn").classList.add("selected");
+            }
+        }
+
         function signup() {
-            window.location.href = "home.html"; 
+            if (selectedRole === "seller") {
+                window.location.href = "homeforseller.html";
+            } else {
+                window.location.href = "home.html";
+            }
         }
     </script>
 
