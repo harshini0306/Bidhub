@@ -11,7 +11,6 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-
         body {
             background-color: black;
             color: white;
@@ -21,7 +20,6 @@
             height: 100vh;
             overflow: hidden;
         }
-
         .left-container {
             width: 60%;
             display: flex;
@@ -30,12 +28,10 @@
             justify-content: center;
             text-align: center;
         }
-
         .left-container h1 {
             font-size: 50px;
             font-weight: bold;
         }
-
         .right-container {
             width: 40%;
             height: 100vh;
@@ -46,39 +42,6 @@
             right: 0;
             top: 0;
         }
-
-        .add-item-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            color: black;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .modal input, .modal button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 8px;
-        }
-
         .bid-item {
             background-color: #222;
             padding: 15px;
@@ -89,8 +52,13 @@
             align-items: center;
             transition: 0.3s;
         }
-
-        .view-more {
+        .bid-item:hover {
+            background-color: #333;
+        }
+        .add-item-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background-color: #444;
             color: white;
             border: none;
@@ -99,77 +67,56 @@
             border-radius: 5px;
             transition: 0.3s;
         }
+        .add-item-btn:hover {
+            background-color: #666;
+        }
     </style>
 </head>
 <body>
-
     <div class="left-container">
-        <h1>BidHub</h1>
-        <p>Manage your auction listings.</p>
+        <h1>BidHub - Seller</h1>
+        <p>Manage your items and track bids.</p>
     </div>
-
-    <button class="add-item-button" onclick="openModal()">Add New Item</button>
-
     <div class="right-container" id="bid-list">
+        <button class="add-item-btn" onclick="addNewItem()">Add New Item</button>
     </div>
-
-    <div class="modal" id="addItemModal">
-        <h2>Add New Item</h2>
-        <input type="text" id="itemName" placeholder="Item Name" required>
-        <input type="text" id="location" placeholder="Location" required>
-        <input type="text" id="timeRemaining" placeholder="Time Remaining" required>
-        <input type="date" id="endDate" required>
-        <input type="text" id="currentBid" placeholder="Current Bid" required>
-        <input type="text" id="startingBid" placeholder="Starting Bid" required>
-        <input type="text" id="seller" placeholder="Seller Name" required>
-        <input type="text" id="features" placeholder="Product Features (comma separated)" required>
-        <button onclick="addItem()">Add Item</button>
-        <button onclick="closeModal()">Close</button>
-    </div>
-
     <script>
-        function openModal() {
-            document.getElementById("addItemModal").style.display = "block";
-        }
-
-        function closeModal() {
-            document.getElementById("addItemModal").style.display = "none";
-        }
-
-        function addItem() {
-            const name = document.getElementById("itemName").value;
-            const location = document.getElementById("location").value;
-            const timeRemaining = document.getElementById("timeRemaining").value;
-            const endDate = document.getElementById("endDate").value;
-            const currentBid = document.getElementById("currentBid").value;
-            const startingBid = document.getElementById("startingBid").value;
-            const seller = document.getElementById("seller").value;
-            const features = document.getElementById("features").value.split(",");
-            
-            if (!name || !location || !timeRemaining || !endDate || !currentBid || !startingBid || !seller || !features.length) {
-                alert("Please fill all fields!");
-                return;
-            }
-
+        let products = [
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS" }
+        ];
+        function renderBids() {
             const bidList = document.getElementById("bid-list");
-            const item = document.createElement("div");
-            item.classList.add("bid-item");
-            item.innerHTML = `
-                <div class="bid-details">
-                    <h2>${name}</h2>
-                    <p>📍 ${location}</p>
-                    <p>⏳ ${timeRemaining}</p>
-                    <p>Ends on ${endDate}</p>
-                    <p>💰 Current Bid: ${currentBid}</p>
-                    <p>💲 Starting Bid: ${startingBid}</p>
-                    <p>🏷 Seller: ${seller}</p>
-                    <p>📜 Features: ${features.map(f => `🔹 ${f}`).join("<br>")}</p>
-                </div>
-            `;
-            bidList.appendChild(item);
-            closeModal();
+            bidList.innerHTML = '<button class="add-item-btn" onclick="addNewItem()">Add New Item</button>';
+            products.forEach((product, index) => {
+                const item = document.createElement("div");
+                item.classList.add("bid-item");
+                item.innerHTML = `
+                    <div>
+                        <h2>${product.name}</h2>
+                        <p>Current Bid: ${product.bid}</p>
+                        <div>${product.category}</div>
+                    </div>
+                `;
+                bidList.appendChild(item);
+            });
         }
+        function addNewItem() {
+            const name = prompt("Enter Item Name:");
+            const location = prompt("Enter Item Location:");
+            const endTime = prompt("Enter Auction End Time:");
+            const currentBid = prompt("Enter Current Bid:");
+            const startingBid = prompt("Enter Starting Bid:");
+            const seller = prompt("Enter Seller Name:");
+            const category = prompt("Enter Category:");
+            if (name && location && endTime && currentBid && startingBid && seller && category) {
+                products.push({ name, bid: `$${currentBid}`, category });
+                renderBids();
+            } else {
+                alert("All fields are required!");
+            }
+        }
+        renderBids();
     </script>
-
 </body>
 </html>
