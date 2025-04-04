@@ -120,30 +120,30 @@
 
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter a strong password" required
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-                       title="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.">
+                <input type="password" id="password" placeholder="Enter a strong password" required>
             </div>
 
             <div class="role-options">
-                <button type="submit" onclick="loginAsBidder()">Bidder</button>
-                <button type="button" onclick="loginAsSeller()">Seller</button>
+                <button type="submit" onclick="loginAsBidder(event)">Bidder</button>
+                <button type="button" onclick="loginAsSeller(event)">Seller</button>
             </div>
         </form>
     </div>
 
     <script>
-        function loginAsBidder() {
+        function loginAsBidder(event) {
+            event.preventDefault(); // Prevent form submission
             const form = document.getElementById('loginForm');
             if (form.checkValidity()) {
-                window.location.href = "home.html";
+                window.location.href = "home.html"; // Redirect to bidder page
             }
         }
 
-        function loginAsSeller() {
+        function loginAsSeller(event) {
+            event.preventDefault(); // Prevent form submission
             const form = document.getElementById('loginForm');
             if (form.checkValidity()) {
-                window.location.href = "homeforseller.html";
+                window.location.href = "homeforseller.html"; // Redirect to seller page
             }
         }
     </script>
