@@ -20,22 +20,11 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            padding: 20px;
         }
 
         h1 {
             font-size: 40px;
-            margin-bottom: 10px;
-            text-align: center;
-            color: rgb(103, 14, 103);
-        }
-
-        p.description {
-            font-size: 14px;
-            max-width: 400px;
-            margin-bottom: 30px;
-            color: #ccc;
-            text-align: center;
+            margin-bottom: 20px;
         }
 
         .login-container {
@@ -98,53 +87,36 @@
 <body>
 
     <h1>Welcome to BidHub</h1>
-    <p class="description">
-        BidHub is your trusted online auction platform where buyers and sellers connect. Bid on your favorite items or host live auctions with real-time competition and secure transactions.
-    </p>
     
     <div class="login-container">
-        <form id="loginForm">
-            <div class="input-group">
-                <label for="name">Username</label>
-                <input type="text" id="name" placeholder="e.g. john_doe12" required 
-                       pattern="^[a-zA-Z][a-zA-Z0-9._]{2,19}$" 
-                       title="Username must start with a letter, contain only letters, numbers, underscores or dots, and be 3-20 characters long.">
-            </div>
+        <div class="input-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+        </div>
 
-            <div class="input-group">
-                <label for="email">Gmail Address</label>
-                <input type="email" id="email" placeholder="e.g. yourname@gmail.com" required
-                       pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-                       title="Only Gmail addresses are allowed.">
-            </div>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
 
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter a strong password" required>
-            </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
 
-            <div class="role-options">
-                <button type="submit" onclick="loginAsBidder(event)">Bidder</button>
-                <button type="button" onclick="loginAsSeller(event)">Seller</button>
-            </div>
-        </form>
+        <div class="role-options">
+            <button onclick="loginAsBidder()">Login as Bidder</button>
+            <button onclick="loginAsSeller()">Login as Seller</button>
+        </div>
     </div>
 
     <script>
-        function loginAsBidder(event) {
-            event.preventDefault(); // Prevent form submission
-            const form = document.getElementById('loginForm');
-            if (form.checkValidity()) {
-                window.location.href = "home.html"; // Redirect to bidder page
-            }
+        function loginAsBidder() {
+            window.location.href = "home.html";
         }
 
-        function loginAsSeller(event) {
-            event.preventDefault(); // Prevent form submission
-            const form = document.getElementById('loginForm');
-            if (form.checkValidity()) {
-                window.location.href = "homeforseller.html"; // Redirect to seller page
-            }
+        function loginAsSeller() {
+            window.location.href = "homeforseller.html";
         }
     </script>
 
