@@ -1,177 +1,73 @@
+<!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BidHub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-    background-color: black;
-    color: white;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 100vh;
-    overflow: hidden;
-
-    background-image: url('https://i.pinimg.com/474x/a6/4f/2a/a64f2a7552a239f97cf835c1b657fe33.jpg'); /* Replace with your actual image path */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-        .left-container {
-            width: 60%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .left-container h1 {
-            font-size: 50px;
-            font-weight: bold;
-        }
-
-        .left-container p {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        .left-container .arrow-button {
-            margin-top: 20px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-        }
-
-        .right-container {
-            width: 40%;
-            height: 100vh;
-            background-color: #111;
-            padding: 20px;
-            overflow-y: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-
-        .bid-item {
-            background-color: #222;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .bid-item:hover {
-            background-color: #333;
-        }
-
-        .bid-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bid-item h2 {
-            font-size: 18px;
-        }
-
-        .bid-item p {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .bid-category {
-            font-size: 12px;
-            color: gray;
-            text-align: left;
-        }
-
-        .view-more {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .view-more:hover {
-            background-color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>BidHub</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background-color: black; color: white; display: flex; flex-direction: row; justify-content: space-between; height: 100vh; overflow: hidden; }
+    .left-container { width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .left-container h1 { font-size: 50px; font-weight: bold; }
+    .left-container p { font-size: 16px; margin-top: 10px; }
+    .left-container .arrow-button { margin-top: 20px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+    .right-container { width: 40%; height: 100vh; background-color: #111; padding: 20px; overflow-y: auto; position: absolute; right: 0; top: 0; }
+    .bid-item { background-color: #222; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+    .bid-item:hover { background-color: #333; }
+    .bid-details { display: flex; flex-direction: column; }
+    .bid-item h2 { font-size: 18px; }
+    .bid-item p { font-size: 14px; margin-top: 5px; }
+    .bid-category { font-size: 12px; color: gray; text-align: left; }
+    .view-more { background-color: #444; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+    .view-more:hover { background-color: #666; }
+  </style>
 </head>
 <body>
 
-    <div class="left-container">
-        <h1>BidHub</h1>
-        <p>Select an item from the list to view details and place your bid.</p>
-        <div class="arrow-button">→</div>
-    </div>
+  <div class="left-container">
+    <h1>BidHub</h1>
+    <p>Select an item from the list to view details and place your bid.</p>
+    <div class="arrow-button">→</div>
+  </div>
 
-    <div class="right-container" id="bid-list">
-    </div>
+  <div class="right-container" id="bid-list"></div>
 
-    <script>
-        const products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
-            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
-            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
-            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
-            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
-            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
-            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
-        ];
+  <script>
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("products")) || [];
+    }
 
-        function renderBids() {
-            const bidList = document.getElementById("bid-list");
-            products.forEach((product, index) => {
-                const item = document.createElement("div");
-                item.classList.add("bid-item");
-                item.innerHTML = `
-                    <div class="bid-details">
-                        <h2>${product.name}</h2>
-                        <p>Current Bid: ${product.bid}</p>
-                        <div class="bid-category">${product.category}</div>
-                    </div>
-                    <button class="view-more" onclick="viewMore(${index})">View More</button>
-                `;
-                bidList.appendChild(item);
-            });
-        }
+    function renderBids() {
+      const products = getProducts();
+      const bidList = document.getElementById("bid-list");
+      bidList.innerHTML = "";
 
-        function viewMore(index) {
-            const product = products[index];
-            if (product.file) {
-                window.location.href = product.file;
-            } else {
-                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
-            }
-        }
+      products.forEach((product, index) => {
+        const item = document.createElement("div");
+        item.classList.add("bid-item");
+        item.innerHTML = `
+          <div class="bid-details">
+            <h2>${product.name}</h2>
+            <p>Current Bid: ${product.bid}</p>
+            <div class="bid-category">${product.category}</div>
+          </div>
+          <button class="view-more" onclick="viewMore(${index})">View More</button>
+        `;
+        bidList.appendChild(item);
+      });
+    }
 
-        renderBids();
-    </script>
+    function viewMore(index) {
+      const product = getProducts()[index];
+      if (product.file && product.file !== "#") {
+        window.location.href = product.file;
+      } else {
+        alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+      }
+    }
+
+    renderBids();
+  </script>
 
 </body>
 </html>
