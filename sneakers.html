@@ -131,7 +131,9 @@
         }
 
         // Load the bid history and current bid when the page loads
-        window.onload = loadBidHistory;
+        window.onload = function() {
+            loadBidHistory();
+        };
     </script>
 </body>
 </html>
