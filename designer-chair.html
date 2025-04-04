@@ -44,9 +44,7 @@
 
             <h3>Bid History</h3>
             <ul class="bid-history" id="bid-history">
-                <li>💰 $1,200 - UserX (5 mins ago)</li>
-                <li>💰 $1,100 - UserY (1 hour ago)</li>
-                <li>💰 $1,000 - UserZ (2 hours ago)</li>
+                <!-- Bids will be populated here dynamically -->
             </ul>
 
             <label>Your Bid Amount</label>
@@ -56,6 +54,7 @@
     </div>
 
     <script>
+        // Countdown Timer
         function countdown() {
             let endDate = new Date("April 20, 2025 23:59:59").getTime();
             setInterval(function() {
@@ -68,26 +67,75 @@
         }
         countdown();
 
+        // Place a bid
         function placeBid() {
             let bidAmount = parseInt(document.getElementById("bidInput").value);
             let currentBidElement = document.getElementById("current-bid");
             let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
             let bidHistory = document.getElementById("bid-history");
 
+            // Validate bid amount
             if (isNaN(bidAmount) || bidAmount <= currentBid) {
                 alert("⚠️ Your bid must be higher than $" + currentBid);
                 return;
             }
 
+            // Update current bid (persist this in localStorage)
             currentBidElement.innerText = "$" + bidAmount;
 
-            let newBid = document.createElement("li");
-            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid);
+            // Create new bid object
+            let newBid = {
+                amount: bidAmount,
+                user: "You",
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Add the new bid to the history array in localStorage
+            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+            bidHistoryArray.unshift(newBid); // Add the new bid at the start of the array
+
+            // Store the updated bid history in localStorage
+            localStorage.setItem("bidHistory", JSON.stringify(bidHistoryArray));
+
+            // Store the updated current bid in localStorage
+            localStorage.setItem("currentBid", bidAmount);
+
+            // Update the DOM to show the new bid in the history
+            let newBidElement = document.createElement("li");
+            newBidElement.innerHTML = `💰 $${newBid.amount} - ${newBid.user} (${newBid.timestamp})`;
+            bidHistory.prepend(newBidElement);
 
             alert("✅ Bid placed successfully!");
         }
 
+        // Load current bid and bid history from localStorage on page load
+        function loadBidHistory() {
+            let bidHistory = document.getElementById("bid-history");
+            let currentBidElement = document.getElementById("current-bid");
+
+            // Load the current bid from localStorage
+            let currentBid = localStorage.getItem("currentBid");
+            if (currentBid) {
+                currentBidElement.innerText = "Current Bid: $" + currentBid;
+            }
+
+            // Load the bid history from localStorage
+            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+
+            // Populate the bid history list with data from localStorage
+            bidHistoryArray.forEach(bid => {
+                let bidElement = document.createElement("li");
+                bidElement.innerHTML = `💰 $${bid.amount} - ${bid.user} (${bid.timestamp})`;
+                bidHistory.appendChild(bidElement);
+            });
+        }
+
+        // Load the bid history and current bid when the page loads
+        window.onload = function() {
+            loadBidHistory();
+        };
+
+        // Handle downloading of bidding history
         document.getElementById("downloadReport").addEventListener("click", function () {
             generateExcelReport();
         });
