@@ -80,7 +80,7 @@
                 return;
             }
 
-            // Update current bid
+            // Update current bid (persist this in localStorage)
             currentBidElement.innerText = "$" + bidAmount;
 
             // Create new bid object
@@ -97,13 +97,13 @@
             // Store the updated bid history in localStorage
             localStorage.setItem("bidHistory", JSON.stringify(bidHistoryArray));
 
+            // Store the updated current bid in localStorage
+            localStorage.setItem("currentBid", bidAmount);
+
             // Update the DOM to show the new bid in the history
             let newBidElement = document.createElement("li");
             newBidElement.innerHTML = `💰 $${newBid.amount} - ${newBid.user} (${newBid.timestamp})`;
             bidHistory.prepend(newBidElement);
-
-            // Store the updated current bid in localStorage
-            localStorage.setItem("currentBid", bidAmount);
 
             alert("✅ Bid placed successfully!");
         }
