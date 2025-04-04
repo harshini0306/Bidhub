@@ -5,21 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sneaker Auction - BIDHUB</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo">BIDHUB</div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#" onclick="downloadBidHistory()">Download Bidding History</a></li>
+            <li><a href="#">Auctions</a></li>
             <li><a href="#">How It Works</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <div class="item-image">
-            <img id="product-img" src="https://i.pinimg.com/474x/bf/4b/b0/bf4bb0ba51eca63111655b9d832e9e1c.jpg" alt="Sneaker">
+            <img id="product-img" src="https://i.pinimg.com/474x/bf/4b/b0/bf4bb0ba51eca63111655b9d832e9e1c.jpgg" alt="Sneaker">
         </div>
         <div class="item-details">
             <h2 id="product-name">Limited Edition Air Jordan 1 Sneakers</h2>
@@ -57,6 +56,7 @@
     </div>
 
     <script>
+        // Countdown Timer
         function countdown() {
             let endDate = new Date("June 30, 2025 23:59:59").getTime();
             setInterval(function() {
@@ -69,12 +69,14 @@
         }
         countdown();
 
+        // Place a bid
         function placeBid() {
             let bidAmount = parseInt(document.getElementById("bidInput").value);
             let currentBidElement = document.getElementById("current-bid");
-            let currentBid = parseInt(currentBidElement.innerText.replace("$", "")); 
+            let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
             let bidHistory = document.getElementById("bid-history");
 
+            // Validate bid amount
             if (isNaN(bidAmount) || bidAmount <= currentBid) {
                 alert("⚠️ Your bid must be higher than $" + currentBid);
                 return;
@@ -84,31 +86,46 @@
             currentBidElement.innerText = "$" + bidAmount;
 
             // Add new bid to history
-            let newBid = document.createElement("li");
-            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid); // Add new bid at the top
+            let newBid = {
+                amount: bidAmount,
+                user: "You",
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Update the bid history in the DOM
+            let newBidElement = document.createElement("li");
+            newBidElement.innerHTML = `💰 $${newBid.amount} - ${newBid.user} (${newBid.timestamp})`;
+            bidHistory.prepend(newBidElement);
+
+            // Retrieve current bid history from localStorage (if any)
+            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+            
+            // Add new bid to bid history
+            bidHistoryArray.unshift(newBid); // Add new bid to the beginning of the array
+
+            // Store updated bid history in localStorage
+            localStorage.setItem("bidHistory", JSON.stringify(bidHistoryArray));
 
             alert("✅ Bid placed successfully!");
         }
 
-        function downloadBidHistory() {
-            let bidList = document.querySelectorAll("#bid-history li");
-            let data = [['Bid Amount', 'User', 'Time']];
+        // Load the bid history from localStorage when the page loads
+        function loadBidHistory() {
+            let bidHistory = document.getElementById("bid-history");
             
-            bidList.forEach(item => {
-                let parts = item.innerText.split(" - ");
-                let amount = parts[0].replace("💰 ", "");
-                let userTime = parts[1].split(" (");
-                let user = userTime[0];
-                let time = userTime[1].replace(")", "");
-                data.push([amount, user, time]);
-            });
+            // Retrieve the bid history from localStorage
+            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
 
-            let ws = XLSX.utils.aoa_to_sheet(data);
-            let wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "BidHistory");
-            XLSX.writeFile(wb, "Bid_History.xlsx");
+            // Populate the bid history from localStorage
+            bidHistoryArray.forEach(bid => {
+                let bidElement = document.createElement("li");
+                bidElement.innerHTML = `💰 $${bid.amount} - ${bid.user} (${bid.timestamp})`;
+                bidHistory.appendChild(bidElement);
+            });
         }
+
+        // Call the function to load bid history on page load
+        window.onload = loadBidHistory;
     </script>
 </body>
 </html>
