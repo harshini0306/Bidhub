@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BidHub - Seller</title>
+    <title>BidHub</title>
     <style>
         * {
             margin: 0;
@@ -41,7 +41,7 @@
             margin-top: 10px;
         }
 
-        .left-container .arrow-button {
+        .arrow-button {
             margin-top: 20px;
             width: 40px;
             height: 40px;
@@ -99,7 +99,7 @@
             text-align: left;
         }
 
-        .view-more, .add-item-btn {
+        .view-more {
             background-color: #444;
             color: white;
             border: none;
@@ -109,8 +109,67 @@
             transition: 0.3s;
         }
 
-        .view-more:hover, .add-item-btn:hover {
+        .view-more:hover {
             background-color: #666;
+        }
+
+        .add-button {
+            margin: 20px;
+            padding: 10px 15px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .add-button:hover {
+            background-color: darkgreen;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .modal input, .modal select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+
+        .modal-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .close-button, .submit-button {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .close-button {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+
+        .submit-button {
+            background-color: blue;
+            color: white;
+            border: none;
         }
     </style>
 </head>
@@ -120,10 +179,33 @@
         <h1>BidHub</h1>
         <p>Select an item from the list to view details and place your bid.</p>
         <div class="arrow-button">→</div>
+        <button class="add-button" onclick="openModal()">Add New Item</button>
     </div>
 
     <div class="right-container" id="bid-list">
-        <button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>
+    </div>
+
+    <div class="modal" id="addItemModal">
+        <h2>Add New Item</h2>
+        <label>Item Name:</label>
+        <input type="text" id="itemName" placeholder="Enter item name">
+        <label>Category:</label>
+        <select id="itemCategory">
+            <option value="FURNITURE">Furniture</option>
+            <option value="ELECTRONICS">Electronics</option>
+            <option value="MUSIC">Music</option>
+            <option value="HOME DECOR">Home Decor</option>
+            <option value="FASHION">Fashion</option>
+            <option value="BOOKS">Books</option>
+            <option value="ART">Art</option>
+        </select>
+        <label>Bid Amount:</label>
+        <input type="text" id="itemBid" placeholder="Enter starting bid amount">
+
+        <div class="modal-buttons">
+            <button class="close-button" onclick="closeModal()">Cancel</button>
+            <button class="submit-button" onclick="addNewItem()">Add Item</button>
+        </div>
     </div>
 
     <script>
@@ -131,7 +213,7 @@
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
             { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-pottery.html" },
             { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
             { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
             { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
@@ -142,6 +224,7 @@
 
         function renderBids() {
             const bidList = document.getElementById("bid-list");
+            bidList.innerHTML = "";
             products.forEach((product, index) => {
                 const item = document.createElement("div");
                 item.classList.add("bid-item");
@@ -157,40 +240,19 @@
             });
         }
 
-        function viewMore(index) {
-            const product = products[index];
-            if (product.file) {
-                window.location.href = product.file;
-            } else {
-                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
-            }
-        }
-
+        function openModal() { document.getElementById("addItemModal").style.display = "block"; }
+        function closeModal() { document.getElementById("addItemModal").style.display = "none"; }
         function addNewItem() {
-            const name = prompt("Enter item name:");
-            if (!name) return;
-            const category = prompt("Enter item category:");
-            if (!category) return;
-            const location = prompt("Enter item location:");
-            if (!location) return;
-            const bid = prompt("Enter starting bid amount:");
-            if (!bid) return;
-            const deadline = prompt("Enter bidding deadline:");
-            if (!deadline) return;
-
-            const newProduct = {
-                name: name,
-                bid: `$${bid}`,
-                category: category,
-                file: null // Or a generated link
-            };
-
-            products.push(newProduct);
-            document.getElementById("bid-list").innerHTML = '<button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>';
+            const name = document.getElementById("itemName").value;
+            const category = document.getElementById("itemCategory").value;
+            const bid = "$" + document.getElementById("itemBid").value;
+            products.push({ name, bid, category });
             renderBids();
+            closeModal();
         }
 
         renderBids();
     </script>
+
 </body>
 </html>
