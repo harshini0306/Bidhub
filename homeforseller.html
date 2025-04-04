@@ -3,191 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIDHUB - Dark Mode</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>BidHub</title>
+    <style>
+        /* General Reset */
+        body {
+            background-color: #000; /* Full black background */
+            color: white; /* White text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            background-color: #111; /* Darker shade */
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        /* Add Button */
+        .add-btn {
+            background-color: #28a745; 
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Hidden Form */
+        .form-container {
+            display: none;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            width: 50%;
+            text-align: center;
+        }
+
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input {
+            background-color: #333;
+            color: white;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Product List */
+        .product-list {
+            margin: 20px auto;
+            width: 60%;
+        }
+
+        .product-card {
+            background-color: #111;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+        }
+
+        .view-btn {
+            background-color: #444;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">BIDHUB</div>
-        <button class="add-item-btn" onclick="toggleForm()">+ Add Item</button>
-    </nav>
 
-    <!-- Hidden Form for Adding New Items -->
+    <!-- Header -->
+    <div class="header">
+        <h1>BidHub</h1>
+        <button class="add-btn" onclick="toggleForm()">+ Add New Item</button>
+    </div>
+
+    <!-- Form to Add New Item -->
     <div class="form-container" id="itemForm">
-        <input type="text" id="itemName" placeholder="Item Name">
-        <input type="text" id="itemBid" placeholder="Starting Bid (e.g., $500)">
-        <input type="text" id="itemCategory" placeholder="Category (e.g., ART)">
-        <input type="text" id="itemLocation" placeholder="Location (e.g., New York)">
-        <input type="date" id="itemLastDate">
-        <input type="text" id="itemImage" placeholder="Image URL (optional)">
+        <input type="text" id="name" placeholder="Item Name" required>
+        <input type="text" id="bid" placeholder="Starting Bid (e.g., $500)" required>
+        <input type="text" id="category" placeholder="Category (e.g., ART)" required>
+        <input type="text" id="location" placeholder="Location (e.g., New York)" required>
+        <input type="date" id="lastDate" required>
+        <input type="text" id="imageURL" placeholder="Image URL (optional)">
         <button onclick="addItem()">Submit</button>
     </div>
 
-    <div class="container" id="productList"></div>
+    <!-- Product List -->
+    <div class="product-list" id="productList"></div>
 
     <script>
+        // Initial Product Data
         const products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", location: "New York", lastDate: "2025-12-01", image: "", file: "designer-chair.html" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "Los Angeles", lastDate: "2025-11-15", image: "", file: "gaming-console.html" },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", location: "London", lastDate: "2025-10-30", image: "", file: "vintage-vinyl.html" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", location: "Paris", lastDate: "2025-09-25", image: "", file: "handmade-pottery.html" }
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", image: "https://via.placeholder.com/50" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", image: "https://via.placeholder.com/50" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", image: "https://via.placeholder.com/50" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-pottery.html", image: "https://via.placeholder.com/50" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", image: "https://via.placeholder.com/50" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", image: "https://via.placeholder.com/50" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", image: "https://via.placeholder.com/50" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", image: "https://via.placeholder.com/50" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", image: "https://via.placeholder.com/50" },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", image: "https://via.placeholder.com/50" }
         ];
 
+        // Function to Display Products
         function displayProducts() {
-            const list = document.getElementById("productList");
-            list.innerHTML = "";
-
+            const productList = document.getElementById("productList");
+            productList.innerHTML = "";
             products.forEach((product, index) => {
-                list.innerHTML += `
-                    <div class="product">
-                        <div class="product-info">
-                            ${product.image ? `<img src="${product.image}" class="product-img">` : ""}
-                            <h2>${product.name}</h2>
-                            <p><b>Bid:</b> ${product.bid}</p>
-                            <p><b>Category:</b> ${product.category}</p>
-                            <p><b>Location:</b> ${product.location}</p>
-                            <p><b>Last Date:</b> ${product.lastDate}</p>
+                productList.innerHTML += `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div>
+                            <h3>${product.name}</h3>
+                            <p>Current Bid: ${product.bid}</p>
+                            <small>${product.category}</small>
                         </div>
-                        <div class="product-buttons">
-                            <button onclick="viewMore(${index})">View More</button>
-                        </div>
+                        <button class="view-btn" onclick="window.location.href='${product.file}'">View More</button>
                     </div>
                 `;
             });
         }
 
-        function viewMore(index) {
-            window.location.href = products[index].file;
-        }
-
+        // Function to Toggle Form Visibility
         function toggleForm() {
-            document.getElementById("itemForm").classList.toggle("show");
+            const form = document.getElementById("itemForm");
+            form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
         }
 
+        // Function to Add New Item
         function addItem() {
-            const name = document.getElementById("itemName").value;
-            const bid = document.getElementById("itemBid").value;
-            const category = document.getElementById("itemCategory").value;
-            const location = document.getElementById("itemLocation").value;
-            const lastDate = document.getElementById("itemLastDate").value;
-            const image = document.getElementById("itemImage").value;
+            const name = document.getElementById("name").value;
+            const bid = document.getElementById("bid").value;
+            const category = document.getElementById("category").value;
+            const location = document.getElementById("location").value;
+            const lastDate = document.getElementById("lastDate").value;
+            const image = document.getElementById("imageURL").value || "https://via.placeholder.com/50";
 
-            if (!name || !bid || !category || !location || !lastDate) {
-                alert("Fill all fields (except image, which is optional).");
-                return;
-            }
-
-            products.push({ name, bid, category, location, lastDate, image, file: `${name.toLowerCase().replace(/\s+/g, '-')}.html` });
+            products.push({ name, bid, category, file: "#", image });
             displayProducts();
-            toggleForm();
+            toggleForm(); // Hide form after submission
         }
 
+        // Load Products Initially
         displayProducts();
     </script>
 
-    <style>
-        /* General */
-        body {
-            font-family: Arial, sans-serif;
-            background: #000;
-            color: #ddd;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: #111;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .add-item-btn {
-            background: #222;
-            color: white;
-            border: 1px solid white;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        /* Form */
-        .form-container {
-            display: none;
-            background: #111;
-            padding: 15px;
-            margin: 10px;
-            border: 1px solid #333;
-        }
-
-        .form-container.show {
-            display: block;
-        }
-
-        .form-container input {
-            width: 100%;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: #000;
-            border: 1px solid #444;
-            color: white;
-        }
-
-        .form-container button {
-            background: #222;
-            color: white;
-            border: 1px solid #555;
-            padding: 8px;
-            cursor: pointer;
-        }
-
-        /* Product List */
-        .container {
-            padding: 20px;
-        }
-
-        .product {
-            background: #111;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #222;
-        }
-
-        .product h2 {
-            margin: 0;
-            color: white;
-        }
-
-        .product p {
-            margin: 5px 0;
-            color: #bbb;
-        }
-
-        .product-buttons button {
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .product-img {
-            width: 80px;
-            height: auto;
-            margin-right: 15px;
-            border: 1px solid #333;
-        }
-    </style>
 </body>
 </html>
