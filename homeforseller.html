@@ -189,19 +189,12 @@
     <div class="item-list" id="itemList"></div>
   </div>
 
-  <div id="sellModal">
-    <h3>Select Bidder to Sell</h3>
-    <select id="bidderDropdown"></select><br>
-    <button onclick="confirmSell()">Sell to this User</button>
-  </div>
-
   <footer>
     &copy; 2025 BidHub. All rights reserved.
   </footer>
 
   <script>
     let editIndex = -1;
-    let currentSellIndex = -1;
 
     function getProducts() {
       return JSON.parse(localStorage.getItem("products")) || [];
@@ -229,32 +222,12 @@
         products[editIndex] = newItem;
         editIndex = -1;
       } else {
-        products.push(newItem);
+        products.push(newItem);  // **Append new item without deleting old ones**
       }
 
       setProducts(products);
       document.getElementById("formContainer").style.display = "none";
       renderItems();
-    }
-
-    function editItem(index) {
-      const products = getProducts();
-      const item = products[index];
-      document.getElementById("name").value = item.name;
-      document.getElementById("bid").value = item.bid;
-      document.getElementById("category").value = item.category;
-      document.getElementById("file").value = item.file;
-      editIndex = index;
-      document.getElementById("formContainer").style.display = "block";
-    }
-
-    function deleteItem(index) {
-      if (confirm("Are you sure you want to delete this item?")) {
-        let products = getProducts();
-        products.splice(index, 1);
-        setProducts(products);
-        renderItems();
-      }
     }
 
     function renderItems() {
@@ -269,47 +242,10 @@
             <p><strong>Category:</strong> ${item.category}</p>
             <div class="buttons">
               <button class="view-btn" onclick="window.location.href='${item.file}'">View</button>
-              <button class="edit-btn" onclick="editItem(${index})">Edit</button>
-              <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
-              <button class="sell-btn" onclick="sellItem(${index})">Sell</button>
             </div>
           </div>
         `;
       });
-    }
-
-    function sellItem(index) {
-      const products = getProducts();
-      const item = products[index];
-      currentSellIndex = index;
-
-      const key = item.name.toLowerCase() + "-bidders";
-      const bidders = JSON.parse(localStorage.getItem(key)) || [];
-
-      const dropdown = document.getElementById("bidderDropdown");
-      dropdown.innerHTML = "";
-
-      if (bidders.length === 0) {
-        dropdown.innerHTML = `<option disabled selected>No bidders found</option>`;
-      } else {
-        bidders.forEach(bidder => {
-          const option = document.createElement("option");
-          option.text = bidder;
-          option.value = bidder;
-          dropdown.appendChild(option);
-        });
-      }
-
-      document.getElementById("sellModal").style.display = "block";
-    }
-
-    function confirmSell() {
-      const selectedBidder = document.getElementById("bidderDropdown").value;
-      if (selectedBidder) {
-        alert("Product sold to: " + selectedBidder);
-        // You can add logic here to update status or mark item as sold
-        document.getElementById("sellModal").style.display = "none";
-      }
     }
 
     renderItems();
