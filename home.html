@@ -1,4 +1,3 @@
-<!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,10 +13,10 @@
     .right-container { width: 40%; height: 100vh; background-color: #111; padding: 20px; overflow-y: auto; position: absolute; right: 0; top: 0; }
     .bid-item { background-color: #222; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
     .bid-item:hover { background-color: #333; }
-    .bid-details { display: flex; flex-direction: column; }
+    .bid-details { display: flex; flex-direction: column; max-width: 70%; }
     .bid-item h2 { font-size: 18px; }
     .bid-item p { font-size: 14px; margin-top: 5px; }
-    .bid-category { font-size: 12px; color: gray; text-align: left; }
+    .bid-category, .bid-location, .bid-date, .bid-bidders { font-size: 12px; color: gray; text-align: left; }
     .view-more { background-color: #444; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
     .view-more:hover { background-color: #666; }
   </style>
@@ -37,6 +36,29 @@
       return JSON.parse(localStorage.getItem("products")) || [];
     }
 
+    function setProducts(products) {
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    function initializeItems() {
+      if (!localStorage.getItem("initialized")) {
+        const defaultItems = [
+          { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
+          { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
+          { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
+          { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
+          { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
+          { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
+          { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
+          { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
+          { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
+          { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
+        ];
+        setProducts(defaultItems);
+        localStorage.setItem("initialized", "true");
+      }
+    }
+
     function renderBids() {
       const products = getProducts();
       const bidList = document.getElementById("bid-list");
@@ -49,7 +71,10 @@
           <div class="bid-details">
             <h2>${product.name}</h2>
             <p>Current Bid: ${product.bid}</p>
-            <div class="bid-category">${product.category}</div>
+            <div class="bid-category">Category: ${product.category}</div>
+            <div class="bid-location">Location: ${product.location}</div>
+            <div class="bid-date">Date: ${product.date}</div>
+            <div class="bid-bidders">Bidders: ${product.bidders?.length || 0}</div>
           </div>
           <button class="view-more" onclick="viewMore(${index})">View More</button>
         `;
@@ -62,10 +87,17 @@
       if (product.file && product.file !== "#") {
         window.location.href = product.file;
       } else {
-        alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+        alert(`📌 Product: ${product.name}
+💲 Current Bid: ${product.bid}
+📂 Category: ${product.category}
+📍 Location: ${product.location}
+📅 Date: ${product.date}
+👤 Bidders: ${product.bidders?.join(", ") || "None"}`);
       }
     }
 
+    // Initialize only once
+    initializeItems();
     renderBids();
   </script>
 
