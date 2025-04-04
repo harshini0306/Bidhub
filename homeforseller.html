@@ -3,48 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home for Seller</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>BidHub - Seller</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .left-container {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .left-container h1 {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .left-container p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .left-container .arrow-button {
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        .right-container {
+            width: 40%;
+            height: 100vh;
+            background-color: #111;
+            padding: 20px;
+            overflow-y: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .bid-item {
+            background-color: #222;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .bid-item:hover {
+            background-color: #333;
+        }
+
+        .bid-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bid-item h2 {
+            font-size: 18px;
+        }
+
+        .bid-item p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .bid-category {
+            font-size: 12px;
+            color: gray;
+            text-align: left;
+        }
+
+        .view-more, .add-item-btn {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .view-more:hover, .add-item-btn:hover {
+            background-color: #666;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Home for Seller</h1>
-    </header>
-    
-    <section id="items">
-        <!-- Items from home.html will be dynamically loaded here -->
-    </section>
-    
-    <button id="addNewItemBtn">Add New Item</button>
-    
-    <div id="newItemModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Add New Item</h2>
-            <form id="newItemForm">
-                <label for="itemName">Item Name:</label>
-                <input type="text" id="itemName" required>
-                
-                <label for="itemCategory">Category:</label>
-                <input type="text" id="itemCategory" required>
-                
-                <label for="itemLocation">Location:</label>
-                <input type="text" id="itemLocation" required>
-                
-                <label for="startingBid">Starting Bid:</label>
-                <input type="number" id="startingBid" required>
-                
-                <label for="deadline">Deadline:</label>
-                <input type="date" id="deadline" required>
-                
-                <label for="itemImage">Upload Image:</label>
-                <input type="file" id="itemImage" accept="image/*" required>
-                
-                <button type="submit">Add Item</button>
-            </form>
-        </div>
+
+    <div class="left-container">
+        <h1>BidHub</h1>
+        <p>Select an item from the list to view details and place your bid.</p>
+        <div class="arrow-button">→</div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <div class="right-container" id="bid-list">
+        <button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>
+    </div>
+
+    <script>
+        const products = [
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
+        ];
+
+        function renderBids() {
+            const bidList = document.getElementById("bid-list");
+            products.forEach((product, index) => {
+                const item = document.createElement("div");
+                item.classList.add("bid-item");
+                item.innerHTML = `
+                    <div class="bid-details">
+                        <h2>${product.name}</h2>
+                        <p>Current Bid: ${product.bid}</p>
+                        <div class="bid-category">${product.category}</div>
+                    </div>
+                    <button class="view-more" onclick="viewMore(${index})">View More</button>
+                `;
+                bidList.appendChild(item);
+            });
+        }
+
+        function viewMore(index) {
+            const product = products[index];
+            if (product.file) {
+                window.location.href = product.file;
+            } else {
+                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+            }
+        }
+
+        function addNewItem() {
+            const name = prompt("Enter item name:");
+            if (!name) return;
+            const category = prompt("Enter item category:");
+            if (!category) return;
+            const location = prompt("Enter item location:");
+            if (!location) return;
+            const bid = prompt("Enter starting bid amount:");
+            if (!bid) return;
+            const deadline = prompt("Enter bidding deadline:");
+            if (!deadline) return;
+
+            const newProduct = {
+                name: name,
+                bid: `$${bid}`,
+                category: category,
+                file: null // Or a generated link
+            };
+
+            products.push(newProduct);
+            document.getElementById("bid-list").innerHTML = '<button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>';
+            renderBids();
+        }
+
+        renderBids();
+    </script>
 </body>
 </html>
