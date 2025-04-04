@@ -56,76 +56,82 @@
     </div>
 
     <script>
-        // Countdown Timer
-        function countdown() {
-            let endDate = new Date("June 30, 2025 23:59:59").getTime();
-            setInterval(function() {
-                let now = new Date().getTime();
-                let timeLeft = endDate - now;
-                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
-            }, 1000);
-        }
-        countdown();
+    // Countdown Timer
+    function countdown() {
+        let endDate = new Date("June 30, 2025 23:59:59").getTime();
+        setInterval(function() {
+            let now = new Date().getTime();
+            let timeLeft = endDate - now;
+            let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
+        }, 1000);
+    }
+    countdown();
 
-        // Place a bid
-        function placeBid() {
-            let bidAmount = parseInt(document.getElementById("bidInput").value);
-            let currentBidElement = document.getElementById("current-bid");
-            let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
-            let bidHistory = document.getElementById("bid-history");
+    // Place a bid
+    function placeBid() {
+        let bidAmount = parseInt(document.getElementById("bidInput").value);
+        let currentBidElement = document.getElementById("current-bid");
+        let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
+        let bidHistory = document.getElementById("bid-history");
 
-            // Validate bid amount
-            if (isNaN(bidAmount) || bidAmount <= currentBid) {
-                alert("⚠️ Your bid must be higher than $" + currentBid);
-                return;
-            }
-
-            // Update current bid
-            currentBidElement.innerText = "$" + bidAmount;
-
-            // Add new bid to history
-            let newBid = {
-                amount: bidAmount,
-                user: "You",
-                timestamp: new Date().toLocaleString()
-            };
-
-            // Update the bid history in the DOM
-            let newBidElement = document.createElement("li");
-            newBidElement.innerHTML = `💰 $${newBid.amount} - ${newBid.user} (${newBid.timestamp})`;
-            bidHistory.prepend(newBidElement);
-
-            // Retrieve current bid history from localStorage (if any)
-            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
-            
-            // Add new bid to bid history
-            bidHistoryArray.unshift(newBid); // Add new bid to the beginning of the array
-
-            // Store updated bid history in localStorage
-            localStorage.setItem("bidHistory", JSON.stringify(bidHistoryArray));
-
-            alert("✅ Bid placed successfully!");
+        // Validate bid amount
+        if (isNaN(bidAmount) || bidAmount <= currentBid) {
+            alert("⚠️ Your bid must be higher than $" + currentBid);
+            return;
         }
 
-        // Load the bid history from localStorage when the page loads
-        function loadBidHistory() {
-            let bidHistory = document.getElementById("bid-history");
-            
-            // Retrieve the bid history from localStorage
-            let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+        // Update current bid
+        currentBidElement.innerText = "$" + bidAmount;
 
-            // Populate the bid history from localStorage
-            bidHistoryArray.forEach(bid => {
-                let bidElement = document.createElement("li");
-                bidElement.innerHTML = `💰 $${bid.amount} - ${bid.user} (${bid.timestamp})`;
-                bidHistory.appendChild(bidElement);
-            });
-        }
+        // Add new bid to history
+        let newBid = {
+            amount: bidAmount,
+            user: "You",
+            timestamp: new Date().toLocaleString()
+        };
 
-        // Call the function to load bid history on page load
-        window.onload = loadBidHistory;
-    </script>
+        // Update the bid history in the DOM
+        let newBidElement = document.createElement("li");
+        newBidElement.innerHTML = `💰 $${newBid.amount} - ${newBid.user} (${newBid.timestamp})`;
+        bidHistory.prepend(newBidElement);
+
+        // Retrieve current bid history from localStorage (if any)
+        let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+        
+        // Add new bid to bid history
+        bidHistoryArray.unshift(newBid); // Add new bid to the beginning of the array
+
+        // Store updated bid history in localStorage
+        localStorage.setItem("bidHistory", JSON.stringify(bidHistoryArray));
+
+        // Log to console for debugging
+        console.log("Bid history updated:", bidHistoryArray);
+        alert("✅ Bid placed successfully!");
+    }
+
+    // Load the bid history from localStorage when the page loads
+    function loadBidHistory() {
+        let bidHistory = document.getElementById("bid-history");
+        
+        // Retrieve the bid history from localStorage
+        let bidHistoryArray = JSON.parse(localStorage.getItem("bidHistory")) || [];
+
+        // Log to console for debugging
+        console.log("Loaded bid history:", bidHistoryArray);
+
+        // Populate the bid history from localStorage
+        bidHistoryArray.forEach(bid => {
+            let bidElement = document.createElement("li");
+            bidElement.innerHTML = `💰 $${bid.amount} - ${bid.user} (${bid.timestamp})`;
+            bidHistory.appendChild(bidElement);
+        });
+    }
+
+    // Call the function to load bid history on page load
+    window.onload = loadBidHistory;
+</script>
+
 </body>
 </html>
