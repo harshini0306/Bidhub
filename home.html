@@ -4,27 +4,171 @@
   <meta charset="UTF-8">
   <title>BidHub</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background-color: black; color: white; display: flex; flex-direction: row; justify-content: space-between; height: 100vh; overflow: hidden; }
-    .left-container { width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    .left-container h1 { font-size: 50px; font-weight: bold; }
-    .left-container p { font-size: 16px; margin-top: 10px; }
-    .left-container .arrow-button { margin-top: 20px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; cursor: pointer; }
-    .right-container { width: 40%; height: 100vh; background-color: #111; padding: 20px; overflow-y: auto; position: absolute; right: 0; top: 0; }
-    .bid-item { background-color: #222; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-    .bid-item:hover { background-color: #333; }
-    .bid-details { display: flex; flex-direction: column; max-width: 70%; }
-    .bid-item h2 { font-size: 18px; }
-    .bid-item p { font-size: 14px; margin-top: 5px; }
-    .bid-category, .bid-location, .bid-date, .bid-bidders { font-size: 12px; color: gray; text-align: left; }
-    .view-more { background-color: #444; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
-    .view-more:hover { background-color: #666; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-image: url('https://i.pinimg.com/474x/9d/7c/af/9d7caf002efa649234adcec4aadb96fc.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: rgba(10, 10, 10, 0.85); /* semi-transparent overlay */
+        background-blend-mode: darken;
+        color: #f5f5f5;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 100vh;
+        overflow: hidden;
+      }
+      
+
+    .left-container {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    .left-container h1 {
+        font-size: 64px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #690f7d;
+        text-shadow:
+          -1px -1px 0 #ef55f2,
+           1px -1px 0 #ef55f2,
+          -1px  1px 0 #ef55f2,
+           1px  1px 0 #ef55f2; /* white outline effect */
+      }
+
+    .left-container p {
+      font-size: 18px;
+      color: #ccc;
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+
+    .arrow-button {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 2px solid #6e0c82;
+      color: #81109a;
+      font-size: 22px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .arrow-button:hover {
+      background-color: #d156cf;
+      color: black;
+    }
+
+    .right-container {
+      width: 40%;
+      height: 100vh;
+      background-color: #121212;
+      padding: 24px;
+      overflow-y: auto;
+      position: absolute;
+      right: 0;
+      top: 0;
+      border-left: 1px solid #222;
+    }
+
+    /* Custom Scrollbar */
+    .right-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .right-container::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 4px;
+    }
+
+    .bid-item {
+      background-color: #1c1c1c;
+      padding: 16px 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+      border: 1px solid #2a2a2a;
+    }
+
+    .bid-item:hover {
+      background-color: #2a2a2a;
+    }
+
+    .bid-details {
+      display: flex;
+      flex-direction: column;
+      max-width: 70%;
+    }
+
+    .bid-details h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .bid-details p {
+      font-size: 15px;
+      color: #ddd;
+      margin-bottom: 6px;
+    }
+
+    .bid-category, .bid-location, .bid-date, .bid-bidders {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .view-more {
+      background-color: #690f7d;
+      color: black;
+      border: none;
+      padding: 10px 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .view-more:hover {
+      background-color: #852cc5;
+    }
+    .footer {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #888;
+        font-size: 12px;
+        opacity: 0.7;
+      }
+      
   </style>
 </head>
 <body>
 
   <div class="left-container">
     <h1>BidHub</h1>
+    <p>Welcome to BidHub — your gateway to discovering and bidding on unique items from around the world. Whether you're into vintage collectibles, modern tech, or rare fashion, there's something for everyone. Explore the listings and place your winning bid today!</p>
     <p>Select an item from the list to view details and place your bid.</p>
     <div class="arrow-button">→</div>
   </div>
@@ -100,6 +244,9 @@
     initializeItems();
     renderBids();
   </script>
-
+  <footer class="footer">
+    © 2025 BidHub. All rights reserved.
+  </footer>
+  
 </body>
 </html>
