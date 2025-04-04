@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIDHUB - Black & White</title>
+    <title>BIDHUB - Dark Mode</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="logo">BIDHUB</div>
-        <button class="add-item-btn" onclick="toggleForm()">+ Add New Item</button>
+        <button class="add-item-btn" onclick="toggleForm()">+ Add Item</button>
     </nav>
 
     <!-- Hidden Form for Adding New Items -->
@@ -26,7 +26,6 @@
     <div class="container" id="productList"></div>
 
     <script>
-        // Initial Products
         const products = [
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", location: "New York", lastDate: "2025-12-01", image: "", file: "designer-chair.html" },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "Los Angeles", lastDate: "2025-11-15", image: "", file: "gaming-console.html" },
@@ -74,7 +73,7 @@
             const image = document.getElementById("itemImage").value;
 
             if (!name || !bid || !category || !location || !lastDate) {
-                alert("Please fill all fields (except image, which is optional).");
+                alert("Fill all fields (except image, which is optional).");
                 return;
             }
 
@@ -90,30 +89,32 @@
         /* General */
         body {
             font-family: Arial, sans-serif;
-            background: #111;
-            color: white;
+            background: #000;
+            color: #ddd;
             margin: 0;
             padding: 0;
         }
 
         /* Navbar */
         .navbar {
-            background: #222;
+            background: #111;
             padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #333;
         }
 
         .logo {
             font-size: 24px;
             font-weight: bold;
+            color: white;
         }
 
         .add-item-btn {
-            background: #333;
+            background: #222;
             color: white;
-            border: none;
+            border: 1px solid white;
             padding: 8px 12px;
             cursor: pointer;
         }
@@ -121,9 +122,10 @@
         /* Form */
         .form-container {
             display: none;
-            background: #222;
+            background: #111;
             padding: 15px;
             margin: 10px;
+            border: 1px solid #333;
         }
 
         .form-container.show {
@@ -134,15 +136,15 @@
             width: 100%;
             margin-bottom: 8px;
             padding: 8px;
-            background: #333;
-            border: 1px solid white;
+            background: #000;
+            border: 1px solid #444;
             color: white;
         }
 
         .form-container button {
-            background: #444;
+            background: #222;
             color: white;
-            border: none;
+            border: 1px solid #555;
             padding: 8px;
             cursor: pointer;
         }
@@ -153,27 +155,29 @@
         }
 
         .product {
-            background: #222;
+            background: #111;
             padding: 15px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #222;
         }
 
         .product h2 {
             margin: 0;
+            color: white;
         }
 
         .product p {
             margin: 5px 0;
-            color: #aaa;
+            color: #bbb;
         }
 
         .product-buttons button {
-            background: #444;
+            background: #222;
             color: white;
-            border: none;
+            border: 1px solid #444;
             padding: 5px 10px;
             cursor: pointer;
         }
@@ -182,6 +186,7 @@
             width: 80px;
             height: auto;
             margin-right: 15px;
+            border: 1px solid #333;
         }
     </style>
 </body>
