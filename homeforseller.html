@@ -85,8 +85,8 @@
       margin-bottom: 10px;
       border-radius: 8px;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
       transition: 0.3s;
     }
 
@@ -121,150 +121,148 @@
       padding: 8px 12px;
       cursor: pointer;
       border-radius: 5px;
-      transition: 0.3s;
+      margin-top: 10px;
+      align-self: flex-start;
     }
 
     .view-more:hover {
       background-color: #666;
     }
 
-    /* Popup form styling */
-    .popup-form {
-      display: none;
+    .extra-details {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #333;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .form-popup {
       position: fixed;
-      top: 20%;
+      top: 50%;
       left: 50%;
-      transform: translate(-50%, -20%);
+      transform: translate(-50%, -50%);
       background-color: #222;
       padding: 20px;
-      border-radius: 10px;
-      z-index: 1000;
-      width: 300px;
+      border: 2px solid #555;
+      border-radius: 8px;
+      display: none;
+      z-index: 100;
     }
 
-    .popup-form input {
-      width: 100%;
-      margin-bottom: 10px;
+    .form-popup input, .form-popup button {
+      margin: 8px 0;
       padding: 8px;
+      width: 100%;
       border-radius: 5px;
       border: none;
     }
 
-    .popup-form button {
-      width: 100%;
-      background-color: #444;
+    .form-popup input {
+      background-color: #333;
       color: white;
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
+    }
+
+    .form-popup button {
+      background-color: #555;
+      color: white;
       cursor: pointer;
     }
 
-    .popup-form button:hover {
-      background-color: #666;
+    .form-popup button:hover {
+      background-color: #777;
     }
   </style>
 </head>
 <body>
 
   <div class="left-container">
-    <button class="add-button" onclick="toggleForm()">Add New Item</button>
     <h1>BidHub</h1>
     <p>Select an item from the list to view details and place your bid.</p>
     <div class="arrow-button">→</div>
-
-    <!-- Hidden Form -->
-    <div class="popup-form" id="form-popup">
-      <input type="text" id="itemName" placeholder="Item Name" required>
-      <input type="text" id="itemBid" placeholder="Current Bid (e.g. $900)" required>
-      <input type="text" id="itemCategory" placeholder="Category (e.g. ART)" required>
-      <input type="text" id="itemImage" placeholder="Image URL" required>
-      <button onclick="addNewItem()">Submit</button>
-    </div>
+    <button class="add-button" onclick="showForm()">+ Add New Item</button>
   </div>
 
   <div class="right-container" id="bid-list"></div>
 
+  <!-- Form Popup -->
+  <div class="form-popup" id="formPopup">
+    <input type="text" id="itemName" placeholder="Item Name" required />
+    <input type="text" id="itemBid" placeholder="Bid Amount (e.g., $500)" required />
+    <input type="text" id="itemCategory" placeholder="Category" required />
+    <input type="text" id="itemLocation" placeholder="Location (e.g., NY, USA)" required />
+    <input type="date" id="itemDate" placeholder="Last Date" required />
+    <input type="text" id="itemImage" placeholder="Image URL (optional)" />
+    <button onclick="addItem()">Add Item</button>
+  </div>
+
   <script>
-    let products = [
-      { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
-      { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
-      { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
-      { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
-      { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
-      { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
-      { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
-      { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
-      { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
-      { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
+    const products = [
+      { name: "Designer Chair", bid: "$750", category: "FURNITURE", location: "London", lastDate: "2025-04-12", image: "", isNew: false },
+      { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "USA", lastDate: "2025-04-14", image: "", isNew: false }
     ];
 
-    function toggleForm() {
-      const form = document.getElementById("form-popup");
-      form.style.display = form.style.display === "block" ? "none" : "block";
+    function showForm() {
+      document.getElementById("formPopup").style.display = "block";
     }
 
-    function addNewItem() {
+    function hideForm() {
+      document.getElementById("formPopup").style.display = "none";
+    }
+
+    function addItem() {
       const name = document.getElementById("itemName").value;
       const bid = document.getElementById("itemBid").value;
       const category = document.getElementById("itemCategory").value;
-      const image = document.getElementById("itemImage").value;
-      const fileName = name.toLowerCase().replace(/\s+/g, "-") + ".html";
+      const location = document.getElementById("itemLocation").value;
+      const lastDate = document.getElementById("itemDate").value;
+      const image = document.getElementById("itemImage").value || "";
 
-      if (!name || !bid || !category || !image) {
-        alert("Please fill all fields.");
+      if (!name || !bid || !category || !location || !lastDate) {
+        alert("Please fill out all required fields.");
         return;
       }
 
       products.push({
-        name: name,
-        bid: bid,
-        category: category,
-        file: fileName
+        name, bid, category, location, lastDate,
+        image,
+        isNew: true,
+        expanded: false
       });
 
-      alert(`✔️ ${name} added!\n📄 Page: ${fileName}`);
       renderBids();
-      toggleForm();
+      hideForm();
+      document.getElementById("formPopup").reset();
     }
 
     function renderBids() {
       const bidList = document.getElementById("bid-list");
       bidList.innerHTML = "";
+
       products.forEach((product, index) => {
         const item = document.createElement("div");
         item.classList.add("bid-item");
+
         item.innerHTML = `
           <div class="bid-details">
             <h2>${product.name}</h2>
             <p>Current Bid: ${product.bid}</p>
             <div class="bid-category">${product.category}</div>
           </div>
-          <button class="view-more" onclick="viewMore(${index})">View More</button>
+          <button class="view-more" onclick="toggleDetails(${index}, this)">View More</button>
+          <div class="extra-details" style="display: ${product.expanded ? 'block' : 'none'};">
+            ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width:100%;max-height:200px;object-fit:cover;margin-bottom:10px;">` : ''}
+            📍 Location: ${product.location}<br>
+            📅 Bidding Ends On: ${product.lastDate}
+          </div>
         `;
         bidList.appendChild(item);
       });
     }
 
-    function viewMore(index) {
-      const product = products[index];
-      const htmlContent = `
-        <html>
-        <head>
-          <title>${product.name} - BIDHUB</title>
-        </head>
-        <body style="font-family: Arial; padding: 20px;">
-          <h1>${product.name}</h1>
-          <p><strong>Bid:</strong> ${product.bid}</p>
-          <p><strong>Category:</strong> ${product.category}</p>
-          <img src="${product.image || 'https://via.placeholder.com/300'}" alt="${product.name}" width="300" />
-          <p><em>This is a dynamically generated page.</em></p>
-        </body>
-        </html>
-      `;
-      const newWindow = window.open();
-      newWindow.document.write(htmlContent);
-      newWindow.document.close();
+    function toggleDetails(index, btn) {
+      products[index].expanded = !products[index].expanded;
+      renderBids();
     }
 
     renderBids();
