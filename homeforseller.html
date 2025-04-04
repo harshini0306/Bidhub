@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family:'Times New Roman', Times, serif;
+      font-family: 'Times New Roman', Times, serif;
     }
 
     body {
@@ -67,7 +67,7 @@
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
     }
 
-    .form-container input, .form-container select {
+    .form-container input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -128,6 +128,9 @@
       transition: 0.2s ease;
     }
 
+    .sell-btn { background: #12e95d; color: black; }
+    .sell-btn:hover { background: #1bff75; }
+
     .view-btn { background: #ffffff; color: #000; }
     .view-btn:hover { background: #ddd; }
 
@@ -137,8 +140,16 @@
     .delete-btn { background: #ff3c3c; color: white; }
     .delete-btn:hover { background: #ff7373; }
 
-    .sell-btn { background: #2196f3; color: white; }
-    .sell-btn:hover { background: #64b5f6; }
+    .sell-container {
+      display: none;
+      background: #222;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      border: 1px solid #444;
+      max-width: 400px;
+      text-align: center;
+    }
 
     footer {
       background-color: #111;
@@ -159,24 +170,21 @@
   <div class="container">
     <h1>Manage Your Auction Listings</h1>
 
-    <!-- Add Item Form -->
     <div class="form-container" id="formContainer">
       <input type="text" id="name" placeholder="Item Name">
       <input type="text" id="bid" placeholder="Starting Bid (e.g. $500)">
       <input type="text" id="category" placeholder="Category">
-      <input type="text" id="file" placeholder="File (e.g. chair.html)">
       <button onclick="saveItem()">Submit</button>
     </div>
 
-    <!-- Sell Popup -->
-    <div class="form-container" id="sellPopup">
-      <h3>Select Bidder to Sell</h3>
-      <select id="bidderSelect"></select>
-      <button onclick="confirmSell()">Sell to Selected Bidder</button>
+    <div class="item-list" id="itemList"></div>
+
+    <div class="sell-container" id="sellContainer">
+      <h3>Select a bidder</h3>
+      <select id="bidderList"></select>
+      <button class="sell-btn" onclick="sellItem()">Sell to this user</button>
     </div>
 
-    <!-- Item List -->
-    <div class="item-list" id="itemList"></div>
   </div>
 
   <footer>
@@ -184,8 +192,7 @@
   </footer>
 
   <script>
-    let editIndex = -1;
-    let currentSellIndex = -1;
+    let editIndex = -1, sellIndex = -1;
 
     function getProducts() {
       return JSON.parse(localStorage.getItem("products")) || [];
@@ -204,18 +211,9 @@
       const name = document.getElementById("name").value;
       const bid = document.getElementById("bid").value;
       const category = document.getElementById("category").value;
-      const file = document.getElementById("file").value || "#";
 
       let products = getProducts();
-      const newItem = { 
-        name, 
-        bid, 
-        category, 
-        file, 
-        sold: false, 
-        soldTo: null, 
-        bidders: ["Alice", "Bob", "Charlie"] // Static example
-      };
+      const newItem = { name, bid, category, bidders: [] };
 
       if (editIndex >= 0) {
         products[editIndex] = newItem;
@@ -229,87 +227,22 @@
       renderItems();
     }
 
-    function editItem(index) {
+    function sell(index) {
       const products = getProducts();
-      const item = products[index];
-      document.getElementById("name").value = item.name;
-      document.getElementById("bid").value = item.bid;
-      document.getElementById("category").value = item.category;
-      document.getElementById("file").value = item.file;
-      editIndex = index;
-      document.getElementById("formContainer").style.display = "block";
+      const bidders = products[index].bidders;
+      const select = document.getElementById("bidderList");
+
+      select.innerHTML = bidders.length ? bidders.map(bidder => `<option>${bidder}</option>`).join('') : "<option>No bidders</option>";
+      sellIndex = index;
+      document.getElementById("sellContainer").style.display = "block";
     }
 
-    function deleteItem(index) {
-      if (confirm("Are you sure you want to delete this item?")) {
-        let products = getProducts();
-        products.splice(index, 1);
-        setProducts(products);
-        renderItems();
-      }
-    }
-
-    function openSellPopup(index) {
+    function sellItem() {
+      if (sellIndex < 0) return;
       const products = getProducts();
-      const product = products[index];
-      const select = document.getElementById("bidderSelect");
-
-      select.innerHTML = "";
-
-      if (!product.bidders || product.bidders.length === 0) {
-        alert("No bidders for this item.");
-        return;
-      }
-
-      product.bidders.forEach(bidder => {
-        const option = document.createElement("option");
-        option.value = bidder;
-        option.textContent = bidder;
-        select.appendChild(option);
-      });
-
-      currentSellIndex = index;
-      document.getElementById("sellPopup").style.display = "block";
-    }
-
-    function confirmSell() {
-      const selectedBidder = document.getElementById("bidderSelect").value;
-      const products = getProducts();
-
-      if (currentSellIndex >= 0 && selectedBidder) {
-        products[currentSellIndex].sold = true;
-        products[currentSellIndex].soldTo = selectedBidder;
-        setProducts(products);
-        renderItems();
-        document.getElementById("sellPopup").style.display = "none";
-        currentSellIndex = -1;
-      }
-    }
-
-    function renderItems() {
-      const products = getProducts();
-      const container = document.getElementById("itemList");
-      container.innerHTML = "";
-
-      products.forEach((item, index) => {
-        const sellButton = item.sold 
-          ? `<p style="color:#10ff78;"><strong>Sold to:</strong> ${item.soldTo}</p>` 
-          : `<button class="sell-btn" onclick="openSellPopup(${index})">Sell</button>`;
-
-        container.innerHTML += `
-          <div class="item">
-            <h3>${item.name}</h3>
-            <p><strong>Bid:</strong> ${item.bid}</p>
-            <p><strong>Category:</strong> ${item.category}</p>
-            <div class="buttons">
-              <button class="view-btn" onclick="window.location.href='${item.file}'">View</button>
-              <button class="edit-btn" onclick="editItem(${index})">Edit</button>
-              <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
-              ${sellButton}
-            </div>
-          </div>
-        `;
-      });
+      const selectedBidder = document.getElementById("bidderList").value;
+      alert(`Item sold to ${selectedBidder}`);
+      document.getElementById("sellContainer").style.display = "none";
     }
 
     renderItems();
