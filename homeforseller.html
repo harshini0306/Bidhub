@@ -92,6 +92,13 @@
             padding: 10px;
             border-radius: 5px;
         }
+
+        .item-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #222;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -177,7 +184,32 @@
         }
 
         function viewMore(index) {
-            window.location.href = products[index].file;
+            const item = products[index];
+            if (item.file === "#") {
+                const detailsId = `details-${index}`;
+                let detailsDiv = document.getElementById(detailsId);
+
+                if (detailsDiv) {
+                    detailsDiv.style.display = detailsDiv.style.display === "none" ? "block" : "none";
+                    return;
+                }
+
+                const container = document.createElement("div");
+                container.className = "item-details";
+                container.id = detailsId;
+                container.innerHTML = `
+                    <p><strong>Item Name:</strong> ${item.name}</p>
+                    <p><strong>Category:</strong> ${item.category}</p>
+                    <p><strong>Starting Bid:</strong> ${item.bid}</p>
+                    <p><strong>Location:</strong> ${item.location}</p>
+                    <p><strong>Date:</strong> ${item.date}</p>
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 200px; margin-top: 10px;">` : ""}
+                `;
+                const itemDiv = document.querySelectorAll(".item")[index];
+                itemDiv.appendChild(container);
+            } else {
+                window.location.href = item.file;
+            }
         }
 
         function sellItem(index) {
