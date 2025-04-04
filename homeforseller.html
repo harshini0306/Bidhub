@@ -11,6 +11,7 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+
         body {
             background-color: black;
             color: white;
@@ -20,6 +21,7 @@
             height: 100vh;
             overflow: hidden;
         }
+
         .left-container {
             width: 60%;
             display: flex;
@@ -28,14 +30,17 @@
             justify-content: center;
             text-align: center;
         }
+
         .left-container h1 {
             font-size: 50px;
             font-weight: bold;
         }
+
         .left-container p {
             font-size: 16px;
             margin-top: 10px;
         }
+
         .left-container .arrow-button {
             margin-top: 20px;
             width: 40px;
@@ -47,6 +52,7 @@
             border: 2px solid white;
             cursor: pointer;
         }
+
         .right-container {
             width: 40%;
             height: 100vh;
@@ -57,23 +63,42 @@
             right: 0;
             top: 0;
         }
+
         .bid-item {
             background-color: #222;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 8px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             transition: 0.3s;
         }
+
         .bid-item:hover {
             background-color: #333;
         }
+
         .bid-details {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
         }
+
+        .bid-item h2 {
+            font-size: 18px;
+        }
+
+        .bid-item p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .bid-category {
+            font-size: 12px;
+            color: gray;
+            text-align: left;
+        }
+
         .view-more {
             background-color: #444;
             color: white;
@@ -82,68 +107,47 @@
             cursor: pointer;
             border-radius: 5px;
             transition: 0.3s;
-            margin-top: 10px;
         }
+
         .view-more:hover {
             background-color: #666;
         }
-        .details {
-            display: none;
-            background-color: #333;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .add-button {
-            margin: 20px;
-            padding: 10px 15px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .add-button:hover {
-            background-color: darkgreen;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            color: black;
-            padding: 20px;
+
+        .add-item-form {
+            background-color: #1c1c1c;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
         }
-        .modal input, .modal select {
+
+        .add-item-form input {
             width: 100%;
+            margin-bottom: 10px;
             padding: 8px;
-            margin-top: 8px;
-            border: 1px solid gray;
+            border: none;
             border-radius: 5px;
+            background-color: #2c2c2c;
+            color: white;
         }
-        .modal-buttons {
-            margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .close-button, .submit-button {
-            padding: 8px 12px;
+
+        .add-item-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 5px;
+            width: 100%;
         }
-        .close-button {
-            background-color: red;
-            color: white;
-            border: none;
+
+        .add-item-form button:hover {
+            background-color: #218838;
         }
-        .submit-button {
-            background-color: blue;
-            color: white;
-            border: none;
+
+        .form-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ccc;
         }
     </style>
 </head>
@@ -152,102 +156,95 @@
     <div class="left-container">
         <h1>BidHub</h1>
         <p>Select an item from the list to view details and place your bid.</p>
-        <button class="add-button" onclick="openModal()">Add New Item</button>
+        <div class="arrow-button">→</div>
     </div>
 
-    <div class="right-container" id="bid-list"></div>
-
-    <div class="modal" id="addItemModal">
-        <h2>Add New Item</h2>
-        <label>Item Name:</label>
-        <input type="text" id="itemName" placeholder="Enter item name">
-        <label>Category:</label>
-        <select id="itemCategory">
-            <option value="FURNITURE">Furniture</option>
-            <option value="ELECTRONICS">Electronics</option>
-            <option value="MUSIC">Music</option>
-            <option value="HOME DECOR">Home Decor</option>
-            <option value="FASHION">Fashion</option>
-            <option value="BOOKS">Books</option>
-            <option value="ART">Art</option>
-        </select>
-        <label>Bid Amount:</label>
-        <input type="text" id="itemBid" placeholder="Enter starting bid amount">
-        <label>Location:</label>
-        <input type="text" id="itemLocation" placeholder="Enter location">
-        <label>Deadline:</label>
-        <input type="date" id="itemDeadline">
-
-        <div class="modal-buttons">
-            <button class="close-button" onclick="closeModal()">Cancel</button>
-            <button class="submit-button" onclick="addNewItem()">Add Item</button>
+    <div class="right-container" id="bid-list">
+        <!-- Add item form -->
+        <div class="add-item-form">
+            <div class="form-title">Add New Item</div>
+            <input type="text" id="itemName" placeholder="Item Name">
+            <input type="text" id="itemBid" placeholder="Starting Bid (e.g. $500)">
+            <input type="text" id="itemCategory" placeholder="Category (e.g. FASHION)">
+            <input type="text" id="itemFile" placeholder="File Name (e.g. new-item.html)">
+            <button onclick="addNewItem()">Add Item</button>
         </div>
     </div>
 
     <script>
         const products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", location: "New York", deadline: "2025-04-10" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "Los Angeles", deadline: "2025-04-15" },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", location: "Chicago", deadline: "2025-04-18" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", location: "Austin", deadline: "2025-04-12" },
-            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", location: "Miami", deadline: "2025-04-25" },
-            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", location: "Boston", deadline: "2025-04-20" },
-            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", location: "San Francisco", deadline: "2025-04-22" },
-            { name: "Abstract Wall Art", bid: "$650", category: "ART", location: "Seattle", deadline: "2025-04-30" }
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
         ];
 
         function renderBids() {
             const bidList = document.getElementById("bid-list");
-            bidList.innerHTML = "";
+
             products.forEach((product, index) => {
                 const item = document.createElement("div");
                 item.classList.add("bid-item");
                 item.innerHTML = `
                     <div class="bid-details">
-                        <div>
-                            <h2>${product.name}</h2>
-                            <p>Current Bid: ${product.bid}</p>
-                            <p class="bid-category">${product.category}</p>
-                        </div>
-                        <button class="view-more" onclick="toggleDetails(${index})">View More</button>
+                        <h2>${product.name}</h2>
+                        <p>Current Bid: ${product.bid}</p>
+                        <div class="bid-category">${product.category}</div>
                     </div>
-                    <div class="details" id="details-${index}">
-                        <p><strong>Location:</strong> ${product.location}</p>
-                        <p><strong>Deadline:</strong> ${product.deadline}</p>
-                    </div>
+                    <button class="view-more" onclick="viewMore(${index})">View More</button>
                 `;
-                bidList.appendChild(item);
+                bidList.insertBefore(item, bidList.children[0]);
             });
         }
 
-        function openModal() {
-            document.getElementById("addItemModal").style.display = "block";
-        }
-
-        function closeModal() {
-            document.getElementById("addItemModal").style.display = "none";
+        function viewMore(index) {
+            const product = products[index];
+            if (product.file) {
+                window.location.href = product.file;
+            } else {
+                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
+            }
         }
 
         function addNewItem() {
             const name = document.getElementById("itemName").value;
+            const bid = document.getElementById("itemBid").value;
             const category = document.getElementById("itemCategory").value;
-            const bid = "$" + document.getElementById("itemBid").value;
-            const location = document.getElementById("itemLocation").value;
-            const deadline = document.getElementById("itemDeadline").value;
+            const file = document.getElementById("itemFile").value;
 
-            if (!name || !bid || !location || !deadline) {
-                alert("Please fill all fields.");
+            if (!name || !bid || !category || !file) {
+                alert("Please fill all fields to add a new item.");
                 return;
             }
 
-            products.push({ name, bid, category, location, deadline });
-            renderBids();
-            closeModal();
-        }
+            const newItem = { name, bid, category, file };
+            products.unshift(newItem);
 
-        function toggleDetails(index) {
-            const details = document.getElementById(`details-${index}`);
-            details.style.display = details.style.display === "none" || !details.style.display ? "block" : "none";
+            const bidList = document.getElementById("bid-list");
+
+            const item = document.createElement("div");
+            item.classList.add("bid-item");
+            item.innerHTML = `
+                <div class="bid-details">
+                    <h2>${newItem.name}</h2>
+                    <p>Current Bid: ${newItem.bid}</p>
+                    <div class="bid-category">${newItem.category}</div>
+                </div>
+                <button class="view-more" onclick="viewMore(0)">View More</button>
+            `;
+
+            bidList.insertBefore(item, bidList.children[0]);
+
+            document.getElementById("itemName").value = "";
+            document.getElementById("itemBid").value = "";
+            document.getElementById("itemCategory").value = "";
+            document.getElementById("itemFile").value = "";
         }
 
         renderBids();
