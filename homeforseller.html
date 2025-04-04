@@ -41,7 +41,8 @@
             margin-top: 10px;
         }
 
-        .left-container .arrow-button {
+        .left-container .arrow-button,
+        .left-container .add-button {
             margin-top: 20px;
             width: 40px;
             height: 40px;
@@ -51,6 +52,14 @@
             border-radius: 50%;
             border: 2px solid white;
             cursor: pointer;
+        }
+
+        .add-button {
+            background-color: #444;
+            width: auto;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
         }
 
         .right-container {
@@ -113,41 +122,35 @@
             background-color: #666;
         }
 
-        .add-item-form {
-            background-color: #1c1c1c;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+        #form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 1000;
         }
 
-        .add-item-form input {
+        #form-popup input {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
             width: 100%;
-            margin-bottom: 10px;
-            padding: 8px;
-            border: none;
             border-radius: 5px;
-            background-color: #2c2c2c;
-            color: white;
+            border: none;
         }
 
-        .add-item-form button {
-            background-color: #28a745;
-            color: white;
+        #form-popup button {
+            margin-top: 10px;
+            padding: 10px;
             border: none;
-            padding: 10px 15px;
             border-radius: 5px;
+            background-color: #555;
+            color: white;
             cursor: pointer;
-            width: 100%;
-        }
-
-        .add-item-form button:hover {
-            background-color: #218838;
-        }
-
-        .form-title {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #ccc;
         }
     </style>
 </head>
@@ -157,18 +160,18 @@
         <h1>BidHub</h1>
         <p>Select an item from the list to view details and place your bid.</p>
         <div class="arrow-button">→</div>
+        <div class="add-button" onclick="showForm()">+ Add New Item</div>
     </div>
 
-    <div class="right-container" id="bid-list">
-        <!-- Add item form -->
-        <div class="add-item-form">
-            <div class="form-title">Add New Item</div>
-            <input type="text" id="itemName" placeholder="Item Name">
-            <input type="text" id="itemBid" placeholder="Starting Bid (e.g. $500)">
-            <input type="text" id="itemCategory" placeholder="Category (e.g. FASHION)">
-            <input type="text" id="itemFile" placeholder="File Name (e.g. new-item.html)">
-            <button onclick="addNewItem()">Add Item</button>
-        </div>
+    <div class="right-container" id="bid-list"></div>
+
+    <div id="form-popup">
+        <input type="text" id="name" placeholder="Item Name" required>
+        <input type="text" id="bid" placeholder="Starting Bid (e.g. $100)" required>
+        <input type="text" id="category" placeholder="Category" required>
+        <input type="text" id="image" placeholder="Image URL (optional)">
+        <button onclick="addItem()">Add Item</button>
+        <button onclick="closeForm()">Cancel</button>
     </div>
 
     <script>
@@ -187,7 +190,7 @@
 
         function renderBids() {
             const bidList = document.getElementById("bid-list");
-
+            bidList.innerHTML = "";
             products.forEach((product, index) => {
                 const item = document.createElement("div");
                 item.classList.add("bid-item");
@@ -199,52 +202,39 @@
                     </div>
                     <button class="view-more" onclick="viewMore(${index})">View More</button>
                 `;
-                bidList.insertBefore(item, bidList.children[0]);
+                bidList.appendChild(item);
             });
         }
 
         function viewMore(index) {
             const product = products[index];
-            if (product.file) {
-                window.location.href = product.file;
-            } else {
-                alert(`📌 Product: ${product.name}\n💲 Current Bid: ${product.bid}\n📂 Category: ${product.category}`);
-            }
+            const fileName = product.file || product.name.toLowerCase().replace(/\s+/g, '-') + ".html";
+            window.location.href = fileName;
         }
 
-        function addNewItem() {
-            const name = document.getElementById("itemName").value;
-            const bid = document.getElementById("itemBid").value;
-            const category = document.getElementById("itemCategory").value;
-            const file = document.getElementById("itemFile").value;
+        function showForm() {
+            document.getElementById("form-popup").style.display = "block";
+        }
 
-            if (!name || !bid || !category || !file) {
-                alert("Please fill all fields to add a new item.");
+        function closeForm() {
+            document.getElementById("form-popup").style.display = "none";
+        }
+
+        function addItem() {
+            const name = document.getElementById("name").value;
+            const bid = document.getElementById("bid").value;
+            const category = document.getElementById("category").value;
+
+            if (!name || !bid || !category) {
+                alert("Please fill in all required fields.");
                 return;
             }
 
-            const newItem = { name, bid, category, file };
-            products.unshift(newItem);
-
-            const bidList = document.getElementById("bid-list");
-
-            const item = document.createElement("div");
-            item.classList.add("bid-item");
-            item.innerHTML = `
-                <div class="bid-details">
-                    <h2>${newItem.name}</h2>
-                    <p>Current Bid: ${newItem.bid}</p>
-                    <div class="bid-category">${newItem.category}</div>
-                </div>
-                <button class="view-more" onclick="viewMore(0)">View More</button>
-            `;
-
-            bidList.insertBefore(item, bidList.children[0]);
-
-            document.getElementById("itemName").value = "";
-            document.getElementById("itemBid").value = "";
-            document.getElementById("itemCategory").value = "";
-            document.getElementById("itemFile").value = "";
+            const fileName = name.toLowerCase().replace(/\s+/g, '-') + ".html";
+            products.push({ name, bid, category, file: fileName });
+            renderBids();
+            closeForm();
+            alert(`Item '${name}' added! Please manually create a file named '${fileName}' using the HTML structure provided.`);
         }
 
         renderBids();
