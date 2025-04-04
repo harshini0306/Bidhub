@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <title>Seller - BidHub</title>
   <style>
+    /* (Your original styles remain untouched) */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Times New Roman', Times, serif;
+      font-family:'Times New Roman', Times, serif;
     }
 
     body {
@@ -128,9 +129,6 @@
       transition: 0.2s ease;
     }
 
-    .sell-btn { background: #12e95d; color: black; }
-    .sell-btn:hover { background: #1bff75; }
-
     .view-btn { background: #ffffff; color: #000; }
     .view-btn:hover { background: #ddd; }
 
@@ -140,16 +138,8 @@
     .delete-btn { background: #ff3c3c; color: white; }
     .delete-btn:hover { background: #ff7373; }
 
-    .sell-container {
-      display: none;
-      background: #222;
-      padding: 20px;
-      margin: 20px auto;
-      border-radius: 10px;
-      border: 1px solid #444;
-      max-width: 400px;
-      text-align: center;
-    }
+    .sell-btn { background: #12e95d; color: black; }
+    .sell-btn:hover { background: #1bff75; }
 
     footer {
       background-color: #111;
@@ -158,6 +148,24 @@
       font-size: 14px;
       color: #888;
       border-top: 1px solid #333;
+    }
+
+    #sellModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 30px;
+      border-radius: 10px;
+      z-index: 999;
+      border: 1px solid #555;
+    }
+
+    #sellModal select,
+    #sellModal button {
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -174,17 +182,17 @@
       <input type="text" id="name" placeholder="Item Name">
       <input type="text" id="bid" placeholder="Starting Bid (e.g. $500)">
       <input type="text" id="category" placeholder="Category">
+      <input type="text" id="file" placeholder="File (e.g. chair.html)">
       <button onclick="saveItem()">Submit</button>
     </div>
 
     <div class="item-list" id="itemList"></div>
+  </div>
 
-    <div class="sell-container" id="sellContainer">
-      <h3>Select a bidder</h3>
-      <select id="bidderList"></select>
-      <button class="sell-btn" onclick="sellItem()">Sell to this user</button>
-    </div>
-
+  <div id="sellModal">
+    <h3>Select Bidder to Sell</h3>
+    <select id="bidderDropdown"></select><br>
+    <button onclick="confirmSell()">Sell to this User</button>
   </div>
 
   <footer>
@@ -192,7 +200,8 @@
   </footer>
 
   <script>
-    let editIndex = -1, sellIndex = -1;
+    let editIndex = -1;
+    let currentSellIndex = -1;
 
     function getProducts() {
       return JSON.parse(localStorage.getItem("products")) || [];
@@ -211,9 +220,10 @@
       const name = document.getElementById("name").value;
       const bid = document.getElementById("bid").value;
       const category = document.getElementById("category").value;
+      const file = document.getElementById("file").value || "#";
 
       let products = getProducts();
-      const newItem = { name, bid, category, bidders: [] };
+      const newItem = { name, bid, category, file };
 
       if (editIndex >= 0) {
         products[editIndex] = newItem;
@@ -227,22 +237,79 @@
       renderItems();
     }
 
-    function sell(index) {
+    function editItem(index) {
       const products = getProducts();
-      const bidders = products[index].bidders;
-      const select = document.getElementById("bidderList");
-
-      select.innerHTML = bidders.length ? bidders.map(bidder => `<option>${bidder}</option>`).join('') : "<option>No bidders</option>";
-      sellIndex = index;
-      document.getElementById("sellContainer").style.display = "block";
+      const item = products[index];
+      document.getElementById("name").value = item.name;
+      document.getElementById("bid").value = item.bid;
+      document.getElementById("category").value = item.category;
+      document.getElementById("file").value = item.file;
+      editIndex = index;
+      document.getElementById("formContainer").style.display = "block";
     }
 
-    function sellItem() {
-      if (sellIndex < 0) return;
+    function deleteItem(index) {
+      if (confirm("Are you sure you want to delete this item?")) {
+        let products = getProducts();
+        products.splice(index, 1);
+        setProducts(products);
+        renderItems();
+      }
+    }
+
+    function renderItems() {
       const products = getProducts();
-      const selectedBidder = document.getElementById("bidderList").value;
-      alert(`Item sold to ${selectedBidder}`);
-      document.getElementById("sellContainer").style.display = "none";
+      const container = document.getElementById("itemList");
+      container.innerHTML = "";
+      products.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="item">
+            <h3>${item.name}</h3>
+            <p><strong>Bid:</strong> ${item.bid}</p>
+            <p><strong>Category:</strong> ${item.category}</p>
+            <div class="buttons">
+              <button class="view-btn" onclick="window.location.href='${item.file}'">View</button>
+              <button class="edit-btn" onclick="editItem(${index})">Edit</button>
+              <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
+              <button class="sell-btn" onclick="sellItem(${index})">Sell</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function sellItem(index) {
+      const products = getProducts();
+      const item = products[index];
+      currentSellIndex = index;
+
+      const key = item.name.toLowerCase() + "-bidders";
+      const bidders = JSON.parse(localStorage.getItem(key)) || [];
+
+      const dropdown = document.getElementById("bidderDropdown");
+      dropdown.innerHTML = "";
+
+      if (bidders.length === 0) {
+        dropdown.innerHTML = `<option disabled selected>No bidders found</option>`;
+      } else {
+        bidders.forEach(bidder => {
+          const option = document.createElement("option");
+          option.text = bidder;
+          option.value = bidder;
+          dropdown.appendChild(option);
+        });
+      }
+
+      document.getElementById("sellModal").style.display = "block";
+    }
+
+    function confirmSell() {
+      const selectedBidder = document.getElementById("bidderDropdown").value;
+      if (selectedBidder) {
+        alert("Product sold to: " + selectedBidder);
+        // You can add logic here to update status or mark item as sold
+        document.getElementById("sellModal").style.display = "none";
+      }
     }
 
     renderItems();
