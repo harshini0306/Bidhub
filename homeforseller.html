@@ -1,244 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BidHub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BidHub</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-        body {
-            background-color: black;
-            color: white;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            height: 100vh;
-            overflow: hidden;
-        }
+    body {
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-        .left-container {
-            width: 60%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+    .left-container {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
 
-        .left-container h1 {
-            font-size: 50px;
-            font-weight: bold;
-        }
+    .left-container h1 {
+      font-size: 50px;
+      font-weight: bold;
+    }
 
-        .left-container p {
-            font-size: 16px;
-            margin-top: 10px;
-        }
+    .left-container p {
+      font-size: 16px;
+      margin-top: 10px;
+    }
 
-        .left-container .arrow-button,
-        .left-container .add-button {
-            margin-top: 20px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-        }
+    .arrow-button {
+      margin-top: 20px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 2px solid white;
+      cursor: pointer;
+    }
 
-        .add-button {
-            background-color: #444;
-            width: auto;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
+    .add-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #444;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
 
-        .right-container {
-            width: 40%;
-            height: 100vh;
-            background-color: #111;
-            padding: 20px;
-            overflow-y: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
+    .add-button:hover {
+      background-color: #666;
+    }
 
-        .bid-item {
-            background-color: #222;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.3s;
-        }
+    .right-container {
+      width: 40%;
+      height: 100vh;
+      background-color: #111;
+      padding: 20px;
+      overflow-y: auto;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
 
-        .bid-item:hover {
-            background-color: #333;
-        }
+    .bid-item {
+      background-color: #222;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
 
-        .bid-details {
-            display: flex;
-            flex-direction: column;
-        }
+    .bid-item:hover {
+      background-color: #333;
+    }
 
-        .bid-item h2 {
-            font-size: 18px;
-        }
+    .bid-details {
+      display: flex;
+      flex-direction: column;
+    }
 
-        .bid-item p {
-            font-size: 14px;
-            margin-top: 5px;
-        }
+    .bid-item h2 {
+      font-size: 18px;
+    }
 
-        .bid-category {
-            font-size: 12px;
-            color: gray;
-            text-align: left;
-        }
+    .bid-item p {
+      font-size: 14px;
+      margin-top: 5px;
+    }
 
-        .view-more {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
+    .bid-category {
+      font-size: 12px;
+      color: gray;
+      text-align: left;
+    }
 
-        .view-more:hover {
-            background-color: #666;
-        }
+    .view-more {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
 
-        #form-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #222;
-            padding: 30px;
-            border-radius: 10px;
-            z-index: 1000;
-        }
+    .view-more:hover {
+      background-color: #666;
+    }
 
-        #form-popup input {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
-            border: none;
-        }
+    /* Popup form styling */
+    .popup-form {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 1000;
+      width: 300px;
+    }
 
-        #form-popup button {
-            margin-top: 10px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #555;
-            color: white;
-            cursor: pointer;
-        }
-    </style>
+    .popup-form input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .popup-form button {
+      width: 100%;
+      background-color: #444;
+      color: white;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .popup-form button:hover {
+      background-color: #666;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="left-container">
-        <h1>BidHub</h1>
-        <p>Select an item from the list to view details and place your bid.</p>
-        <div class="arrow-button">→</div>
-        <div class="add-button" onclick="showForm()">+ Add New Item</div>
+  <div class="left-container">
+    <button class="add-button" onclick="toggleForm()">Add New Item</button>
+    <h1>BidHub</h1>
+    <p>Select an item from the list to view details and place your bid.</p>
+    <div class="arrow-button">→</div>
+
+    <!-- Hidden Form -->
+    <div class="popup-form" id="form-popup">
+      <input type="text" id="itemName" placeholder="Item Name" required>
+      <input type="text" id="itemBid" placeholder="Current Bid (e.g. $900)" required>
+      <input type="text" id="itemCategory" placeholder="Category (e.g. ART)" required>
+      <input type="text" id="itemImage" placeholder="Image URL" required>
+      <button onclick="addNewItem()">Submit</button>
     </div>
+  </div>
 
-    <div class="right-container" id="bid-list"></div>
+  <div class="right-container" id="bid-list"></div>
 
-    <div id="form-popup">
-        <input type="text" id="name" placeholder="Item Name" required>
-        <input type="text" id="bid" placeholder="Starting Bid (e.g. $100)" required>
-        <input type="text" id="category" placeholder="Category" required>
-        <input type="text" id="image" placeholder="Image URL (optional)">
-        <button onclick="addItem()">Add Item</button>
-        <button onclick="closeForm()">Cancel</button>
-    </div>
+  <script>
+    let products = [
+      { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
+      { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
+      { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
+      { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
+      { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
+      { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
+      { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
+      { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
+      { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
+      { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
+    ];
 
-    <script>
-        const products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html" },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html" },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html" },
-            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html" },
-            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html" },
-            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html" },
-            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html" },
-            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html" },
-            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html" }
-        ];
+    function toggleForm() {
+      const form = document.getElementById("form-popup");
+      form.style.display = form.style.display === "block" ? "none" : "block";
+    }
 
-        function renderBids() {
-            const bidList = document.getElementById("bid-list");
-            bidList.innerHTML = "";
-            products.forEach((product, index) => {
-                const item = document.createElement("div");
-                item.classList.add("bid-item");
-                item.innerHTML = `
-                    <div class="bid-details">
-                        <h2>${product.name}</h2>
-                        <p>Current Bid: ${product.bid}</p>
-                        <div class="bid-category">${product.category}</div>
-                    </div>
-                    <button class="view-more" onclick="viewMore(${index})">View More</button>
-                `;
-                bidList.appendChild(item);
-            });
-        }
+    function addNewItem() {
+      const name = document.getElementById("itemName").value;
+      const bid = document.getElementById("itemBid").value;
+      const category = document.getElementById("itemCategory").value;
+      const image = document.getElementById("itemImage").value;
+      const fileName = name.toLowerCase().replace(/\s+/g, "-") + ".html";
 
-        function viewMore(index) {
-            const product = products[index];
-            const fileName = product.file || product.name.toLowerCase().replace(/\s+/g, '-') + ".html";
-            window.location.href = fileName;
-        }
+      if (!name || !bid || !category || !image) {
+        alert("Please fill all fields.");
+        return;
+      }
 
-        function showForm() {
-            document.getElementById("form-popup").style.display = "block";
-        }
+      products.push({
+        name: name,
+        bid: bid,
+        category: category,
+        file: fileName
+      });
 
-        function closeForm() {
-            document.getElementById("form-popup").style.display = "none";
-        }
+      alert(`✔️ ${name} added!\n📄 Page: ${fileName}`);
+      renderBids();
+      toggleForm();
+    }
 
-        function addItem() {
-            const name = document.getElementById("name").value;
-            const bid = document.getElementById("bid").value;
-            const category = document.getElementById("category").value;
+    function renderBids() {
+      const bidList = document.getElementById("bid-list");
+      bidList.innerHTML = "";
+      products.forEach((product, index) => {
+        const item = document.createElement("div");
+        item.classList.add("bid-item");
+        item.innerHTML = `
+          <div class="bid-details">
+            <h2>${product.name}</h2>
+            <p>Current Bid: ${product.bid}</p>
+            <div class="bid-category">${product.category}</div>
+          </div>
+          <button class="view-more" onclick="viewMore(${index})">View More</button>
+        `;
+        bidList.appendChild(item);
+      });
+    }
 
-            if (!name || !bid || !category) {
-                alert("Please fill in all required fields.");
-                return;
-            }
+    function viewMore(index) {
+      const product = products[index];
+      const htmlContent = `
+        <html>
+        <head>
+          <title>${product.name} - BIDHUB</title>
+        </head>
+        <body style="font-family: Arial; padding: 20px;">
+          <h1>${product.name}</h1>
+          <p><strong>Bid:</strong> ${product.bid}</p>
+          <p><strong>Category:</strong> ${product.category}</p>
+          <img src="${product.image || 'https://via.placeholder.com/300'}" alt="${product.name}" width="300" />
+          <p><em>This is a dynamically generated page.</em></p>
+        </body>
+        </html>
+      `;
+      const newWindow = window.open();
+      newWindow.document.write(htmlContent);
+      newWindow.document.close();
+    }
 
-            const fileName = name.toLowerCase().replace(/\s+/g, '-') + ".html";
-            products.push({ name, bid, category, file: fileName });
-            renderBids();
-            closeForm();
-            alert(`Item '${name}' added! Please manually create a file named '${fileName}' using the HTML structure provided.`);
-        }
-
-        renderBids();
-    </script>
+    renderBids();
+  </script>
 
 </body>
 </html>
