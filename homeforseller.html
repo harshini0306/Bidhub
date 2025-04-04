@@ -28,6 +28,25 @@
             justify-content: center;
             text-align: center;
         }
+        .left-container h1 {
+            font-size: 50px;
+            font-weight: bold;
+        }
+        .left-container p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .left-container .arrow-button {
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+        }
         .right-container {
             width: 40%;
             height: 100vh;
@@ -168,7 +187,13 @@
     <script>
         const products = [
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", location: "New York", deadline: "2025-04-10" },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "Los Angeles", deadline: "2025-04-15" }
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", location: "Los Angeles", deadline: "2025-04-15" },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", location: "Chicago", deadline: "2025-04-18" },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", location: "Austin", deadline: "2025-04-12" },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", location: "Miami", deadline: "2025-04-25" },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", location: "Boston", deadline: "2025-04-20" },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", location: "San Francisco", deadline: "2025-04-22" },
+            { name: "Abstract Wall Art", bid: "$650", category: "ART", location: "Seattle", deadline: "2025-04-30" }
         ];
 
         function renderBids() {
@@ -195,21 +220,26 @@
             });
         }
 
-        function openModal() { document.getElementById("addItemModal").style.display = "block"; }
-        function closeModal() { document.getElementById("addItemModal").style.display = "none"; }
-        
+        function openModal() {
+            document.getElementById("addItemModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("addItemModal").style.display = "none";
+        }
+
         function addNewItem() {
             const name = document.getElementById("itemName").value;
             const category = document.getElementById("itemCategory").value;
             const bid = "$" + document.getElementById("itemBid").value;
             const location = document.getElementById("itemLocation").value;
             const deadline = document.getElementById("itemDeadline").value;
-            
+
             if (!name || !bid || !location || !deadline) {
                 alert("Please fill all fields.");
                 return;
             }
-            
+
             products.push({ name, bid, category, location, deadline });
             renderBids();
             closeModal();
