@@ -1,124 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BidHub Login</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BidHub Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-        body {
-            background-color: black;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+    body {
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-        h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
+    h1 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
 
-        .login-container {
-            background-color: #222;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
-        }
+    .login-container {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
 
-        label {
-            font-size: 14px;
-            display: block;
-            margin-bottom: 5px;
-        }
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            background-color: #333;
-            border: 1px solid #444;
-            border-radius: 5px;
-            color: white;
-        }
+    input {
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      border: 1px solid #444;
+      border-radius: 5px;
+      color: white;
+    }
 
-        input:focus {
-            outline: none;
-            border-color: #fff;
-        }
+    input:focus {
+      outline: none;
+      border-color: #fff;
+    }
 
-        .role-options {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
+    .role-options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
 
-        button {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-            width: 48%;
-        }
+    button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+      width: 48%;
+    }
 
-        button:hover {
-            background-color: #666;
-        }
-    </style>
+    button:hover {
+      background-color: #666;
+    }
+
+    .signup-option {
+      margin-top: 20px;
+    }
+
+    .signup-option button {
+      width: 100%;
+      background-color: #555;
+    }
+
+    .signup-option button:hover {
+      background-color: #777;
+    }
+
+  </style>
 </head>
 <body>
 
-    <h1>Welcome to BidHub</h1>
-    
-    <div class="login-container">
-        <div class="input-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" placeholder="Enter your full name" required>
-        </div>
+  <h1>Welcome to BidHub</h1>
 
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email" required>
-        </div>
-
-        <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" required>
-        </div>
-
-        <div class="role-options">
-            <button onclick="loginAsBidder()">Login as Bidder</button>
-            <button onclick="loginAsSeller()">Login as Seller</button>
-        </div>
+  <div class="login-container">
+    <div class="input-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your full name" required>
     </div>
 
-    <script>
-        function loginAsBidder() {
-            window.location.href = "home.html";
-        }
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+    </div>
 
-        function loginAsSeller() {
-            window.location.href = "homeforseller.html";
-        }
-    </script>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+    </div>
+
+    <div class="role-options">
+      <button onclick="loginAsBidder()">Login as Bidder</button>
+      <button onclick="loginAsSeller()">Login as Seller</button>
+    </div>
+
+    <div class="signup-option">
+      <button onclick="goToSignUp()">Sign Up</button>
+    </div>
+  </div>
+
+  <script>
+    function loginAsBidder() {
+      window.location.href = "home.html";
+    }
+
+    function loginAsSeller() {
+      window.location.href = "homeforseller.html";
+    }
+
+    function goToSignUp() {
+      window.location.href = "signin.html";
+    }
+  </script>
 
 </body>
 </html>
