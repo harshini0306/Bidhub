@@ -123,20 +123,43 @@
     </div>
 
     <script>
-        let products = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
-            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
-            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
-            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
-            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
-            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
-            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
-        ];
- 
+        let products = [];
         let editIndex = -1;
+
+        // Get products from localStorage
+        function getProducts() {
+            return JSON.parse(localStorage.getItem("products")) || [];
+        }
+
+        // Save products to localStorage
+        function setProducts(updatedProducts) {
+            localStorage.setItem("products", JSON.stringify(updatedProducts));
+        }
+
+        // Initialize products
+        function initializeProducts() {
+            // Check if products exist in localStorage
+            if (!localStorage.getItem("products") || getProducts().length === 0) {
+                // Default items
+                const defaultItems = [
+                    { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
+                    { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
+                    { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
+                    { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
+                    { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
+                    { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
+                    { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
+                    { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
+                    { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
+                    { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
+                ];
+                setProducts(defaultItems);
+                localStorage.setItem("initialized", "true");
+            }
+            
+            // Load products from localStorage
+            products = getProducts();
+        }
 
         function toggleForm() {
             const form = document.getElementById("formContainer");
@@ -160,6 +183,9 @@
                 products.push(newItem);
             }
 
+            // Save to localStorage to sync with home.html
+            setProducts(products);
+            
             document.getElementById("formContainer").style.display = "none";
             renderItems();
         }
@@ -179,6 +205,8 @@
         function deleteItem(index) {
             if (confirm("Delete this item?")) {
                 products.splice(index, 1);
+                // Update localStorage
+                setProducts(products);
                 renderItems();
             }
         }
@@ -220,6 +248,11 @@
             const selected = document.querySelector(`input[name="bidder-${index}"]:checked`);
             if (selected) {
                 alert("Item sold to " + selected.value + "!");
+                // Remove the item from the list after selling
+                products.splice(index, 1);
+                // Update localStorage
+                setProducts(products);
+                renderItems();
             } else {
                 alert("Please select a bidder.");
             }
@@ -251,6 +284,8 @@
             });
         }
 
+        // Initialize and render items
+        initializeProducts();
         renderItems();
     </script>
 </body>
