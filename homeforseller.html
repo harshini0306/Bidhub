@@ -122,7 +122,8 @@
     </div>
 
     <script>
-        let products = [
+        // Default products if nothing is in localStorage
+        let defaultProducts = [
             { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
             { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
             { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
@@ -135,6 +136,9 @@
             { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
         ];
  
+        // Load products from localStorage or use default if none exists
+        let products = JSON.parse(localStorage.getItem('auctionProducts')) || defaultProducts;
+        
         let editIndex = -1;
 
         function toggleForm() {
@@ -159,6 +163,9 @@
                 products.push(newItem);
             }
 
+            // Save to localStorage for persistence
+            localStorage.setItem('auctionProducts', JSON.stringify(products));
+
             document.getElementById("formContainer").style.display = "none";
             renderItems();
         }
@@ -178,6 +185,8 @@
         function deleteItem(index) {
             if (confirm("Delete this item?")) {
                 products.splice(index, 1);
+                // Save to localStorage after deletion
+                localStorage.setItem('auctionProducts', JSON.stringify(products));
                 renderItems();
             }
         }
@@ -219,6 +228,11 @@
             const selected = document.querySelector(`input[name="bidder-${index}"]:checked`);
             if (selected) {
                 alert("Item sold to " + selected.value + "!");
+                // Remove the sold item
+                products.splice(index, 1);
+                // Save to localStorage after selling
+                localStorage.setItem('auctionProducts', JSON.stringify(products));
+                renderItems();
             } else {
                 alert("Please select a bidder.");
             }
@@ -250,6 +264,7 @@
             });
         }
 
+        // Initialize the page
         renderItems();
     </script>
 </body>
