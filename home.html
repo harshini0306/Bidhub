@@ -26,7 +26,6 @@
         overflow: hidden;
       }
       
-
     .left-container {
       width: 60%;
       display: flex;
@@ -103,14 +102,20 @@
       margin-bottom: 15px;
       border-radius: 10px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       transition: background-color 0.3s;
       border: 1px solid #2a2a2a;
     }
 
     .bid-item:hover {
       background-color: #2a2a2a;
+    }
+
+    .bid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
     }
 
     .bid-details {
@@ -152,6 +157,65 @@
     .view-more:hover {
       background-color: #852cc5;
     }
+
+    .item-expanded {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #333;
+      display: none;
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #aaa;
+    }
+
+    .info-value {
+      color: #ddd;
+    }
+
+    .bid-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .bid-input {
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #222;
+      color: #fff;
+    }
+
+    .place-bid-btn {
+      background-color: #690f7d;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .place-bid-btn:hover {
+      background-color: #852cc5;
+    }
+
     .footer {
         position: absolute;
         bottom: 10px;
@@ -187,15 +251,15 @@
     function initializeItems() {
       if (!localStorage.getItem("initialized")) {
         const defaultItems = [
-           { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
+          { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
           { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
           { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
-          { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
-          { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
-          { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
-          { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
-          { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
-          { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
+          { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "", location: "London", date: "2025-05-20", image: "", bidders: [] },
+          { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
+          { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
+          { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
+          { name: "Antique Painting", bid: "$5,200", category: "ART", file: "", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
+          { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "", location: "NY", date: "2025-06-18", image: "", bidders: [] }
         ];
         setProducts(defaultItems);
         localStorage.setItem("initialized", "true");
@@ -210,33 +274,125 @@
       products.forEach((product, index) => {
         const item = document.createElement("div");
         item.classList.add("bid-item");
-        item.innerHTML = `
-  <div class="bid-details">
-    <h2>${product.name}</h2>
-  </div>
-  <button class="view-more" onclick="viewMore(${index})">View More</button>
-`;
+        item.dataset.index = index;
 
+        const headerHtml = `
+          <div class="bid-header">
+            <div class="bid-details">
+              <h2>${product.name}</h2>
+            </div>
+            <button class="view-more" onclick="toggleDetails(${index})">View More</button>
+          </div>
+        `;
+
+        const expandedHtml = `
+          <div class="item-expanded" id="expanded-${index}">
+            <div class="item-info">
+              <div class="info-row">
+                <span class="info-label">Current Bid:</span>
+                <span class="info-value">${product.bid}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Category:</span>
+                <span class="info-value">${product.category}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Location:</span>
+                <span class="info-value">${product.location}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Auction End Date:</span>
+                <span class="info-value">${product.date}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Current Bidders:</span>
+                <span class="info-value">${product.bidders?.join(", ") || "None"}</span>
+              </div>
+            </div>
+            <div class="bid-form">
+              <input type="text" class="bid-input" id="bid-amount-${index}" placeholder="Enter your bid amount (e.g. $400)">
+              <button class="place-bid-btn" onclick="placeBid(${index})">Place Bid</button>
+            </div>
+          </div>
+        `;
+
+        item.innerHTML = headerHtml + expandedHtml;
         bidList.appendChild(item);
       });
     }
 
-    function viewMore(index) {
+    function toggleDetails(index) {
       const product = getProducts()[index];
-      if (product.file && product.file !== "#") {
+      if (product.file && product.file !== "") {
         window.location.href = product.file;
       } else {
-        alert(`📌 Product: ${product.name}
-💲 Current Bid: ${product.bid}
-📂 Category: ${product.category}
-📍 Location: ${product.location}
-📅 Date: ${product.date}
-👤 Bidders: ${product.bidders?.join(", ") || "None"}`);
+        const expandedElement = document.getElementById(`expanded-${index}`);
+        if (expandedElement.style.display === "block") {
+          expandedElement.style.display = "none";
+        } else {
+          expandedElement.style.display = "block";
+        }
       }
     }
 
-    // Initialize only once
+    function placeBid(index) {
+      const products = getProducts();
+      const product = products[index];
+      const bidAmountInput = document.getElementById(`bid-amount-${index}`);
+      const bidAmount = bidAmountInput.value.trim();
+      
+      if (!bidAmount) {
+        alert("Please enter a valid bid amount");
+        return;
+      }
+      
+      // Simple validation - ensure bid starts with $
+      const formattedBid = bidAmount.startsWith('$') ? bidAmount : '$' + bidAmount;
+      
+      // Parse current bid and new bid for comparison
+      const currentBidValue = parseFloat(product.bid.replace('$', '').replace(',', ''));
+      const newBidValue = parseFloat(formattedBid.replace('$', '').replace(',', ''));
+      
+      if (isNaN(newBidValue) || newBidValue <= currentBidValue) {
+        alert(`Your bid must be higher than the current bid of ${product.bid}`);
+        return;
+      }
+      
+      // Update the product with new bid
+      product.bid = formattedBid;
+      
+      // Add current user to bidders (using a placeholder name for demo)
+      const username = localStorage.getItem("username") || "You";
+      if (!product.bidders) {
+        product.bidders = [username];
+      } else if (!product.bidders.includes(username)) {
+        product.bidders.push(username);
+      }
+      
+      // Save updated products
+      products[index] = product;
+      setProducts(products);
+      
+      // Refresh the display
+      renderBids();
+      
+      // Show success message
+      alert(`Bid of ${formattedBid} placed successfully!`);
+      
+      // Keep the item expanded
+      document.getElementById(`expanded-${index}`).style.display = "block";
+    }
+
+    // For demo purposes - set a username
+    function setupUsername() {
+      if (!localStorage.getItem("username")) {
+        localStorage.setItem("username", "You");
+      }
+    }
+
+    // Initialize
     initializeItems();
+    setupUsername();
     renderBids();
   </script>
   <footer class="footer">
