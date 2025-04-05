@@ -69,6 +69,7 @@
         }
         .item img {
             max-width: 100px;
+            max-height: 100px;
             display: block;
             margin-top: 10px;
         }
@@ -98,6 +99,10 @@
             margin-top: 10px;
             border-radius: 5px;
         }
+        .item-details img {
+            max-width: 200px;
+            max-height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -124,16 +129,16 @@
     <script>
         // Default products if nothing is in localStorage
         let defaultProducts = [
-            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
-            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
-            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
-            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
-            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
-            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "", bidders: [] },
-            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "", bidders: [] },
-            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "", bidders: [] },
-            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "", bidders: [] },
-            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "", bidders: [] }
+            { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "https://via.placeholder.com/100x100?text=Chair", bidders: ["Alice", "Bob"] },
+            { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "https://via.placeholder.com/100x100?text=Console", bidders: ["Carol"] },
+            { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "https://via.placeholder.com/100x100?text=Vinyl", bidders: ["Dave"] },
+            { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "https://via.placeholder.com/100x100?text=Vase", bidders: ["Eve"] },
+            { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "https://via.placeholder.com/100x100?text=Handbag", bidders: [] },
+            { name: "Rare Book Collection", bid: "$950", category: "BOOKS", file: "books.html", location: "Paris", date: "2025-05-22", image: "https://via.placeholder.com/100x100?text=Books", bidders: [] },
+            { name: "Smartphone - 256GB", bid: "$1,100", category: "ELECTRONICS", file: "smartphone.html", location: "Tokyo", date: "2025-06-01", image: "https://via.placeholder.com/100x100?text=Phone", bidders: [] },
+            { name: "Luxury Watch", bid: "$3,500", category: "FASHION", file: "classic-timepiece.html", location: "Zurich", date: "2025-06-10", image: "https://via.placeholder.com/100x100?text=Watch", bidders: [] },
+            { name: "Antique Painting", bid: "$5,200", category: "ART", file: "modern-art.html", location: "Rome", date: "2025-06-15", image: "https://via.placeholder.com/100x100?text=Painting", bidders: [] },
+            { name: "Limited Edition Sneakers", bid: "$900", category: "FASHION", file: "sneakers.html", location: "NY", date: "2025-06-18", image: "https://via.placeholder.com/100x100?text=Sneakers", bidders: [] }
         ];
  
         // Load products from localStorage or use default if none exists
@@ -144,6 +149,16 @@
         function toggleForm() {
             const form = document.getElementById("formContainer");
             form.style.display = form.style.display === "none" ? "block" : "none";
+            
+            // Clear form fields when opening the form for a new item
+            if (editIndex === -1) {
+                document.getElementById("name").value = "";
+                document.getElementById("bid").value = "";
+                document.getElementById("category").value = "";
+                document.getElementById("location").value = "";
+                document.getElementById("date").value = "";
+                document.getElementById("image").value = "";
+            }
         }
 
         function saveItem() {
@@ -154,7 +169,22 @@
             const date = document.getElementById("date").value;
             const image = document.getElementById("image").value;
 
-            const newItem = { name, bid, category, file: "#", location, date, image, bidders: [] };
+            // Validate required fields
+            if (!name || !bid || !category || !location || !date) {
+                alert("Please fill in all required fields");
+                return;
+            }
+
+            const newItem = { 
+                name, 
+                bid, 
+                category, 
+                file: "#", 
+                location, 
+                date, 
+                image: image || "https://via.placeholder.com/100x100?text=No+Image", 
+                bidders: [] 
+            };
 
             if (editIndex > -1) {
                 products[editIndex] = newItem;
@@ -211,7 +241,7 @@
                     <p><strong>Starting Bid:</strong> ${item.bid}</p>
                     <p><strong>Location:</strong> ${item.location}</p>
                     <p><strong>Date:</strong> ${item.date}</p>
-                    ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 200px; margin-top: 10px;">` : "<p><em>No image provided.</em></p>"}
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}">` : "<p><em>No image provided.</em></p>"}
                 `;
                 document.querySelectorAll(".item")[index].appendChild(details);
             } else {
@@ -242,11 +272,12 @@
             const list = document.getElementById("itemList");
             list.innerHTML = "";
             products.forEach((item, i) => {
+                const hasImage = item.image && item.image.trim() !== "";
                 list.innerHTML += `
                     <div class="item">
                         <strong>${item.name}</strong> (${item.category})<br>
                         Bid: ${item.bid} | Location: ${item.location} | Last Date: ${item.date}<br>
-                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : ""}
+                        ${hasImage ? `<img src="${item.image}" alt="${item.name}">` : ""}
                         <div class="buttons">
                             <button class="view-btn" onclick="viewMore(${i})">View More</button>
                             <button class="edit-btn" onclick="editItem(${i})">Edit</button>
@@ -255,9 +286,9 @@
                         </div>
                         <div class="bidders-container" id="bidders-${i}">
                             ${item.bidders.length === 0 ? "<p>No bidders yet</p>" : item.bidders.map(b => `
-                                <label><input type="radio" name="bidder-${i}" value="${b}"> ${b}</label>
+                                <label><input type="radio" name="bidder-${i}" value="${b}"> ${b}</label><br>
                             `).join("")}
-                            <button class="confirm-sell-btn" onclick="confirmSell(${i})">Sell to this user</button>
+                            ${item.bidders.length > 0 ? `<button class="confirm-sell-btn" onclick="confirmSell(${i})">Sell to this user</button>` : ""}
                         </div>
                     </div>
                 `;
