@@ -137,11 +137,6 @@
       margin-bottom: 6px;
     }
 
-    .bid-actions {
-      display: flex;
-      gap: 10px;
-    }
-
     .bid-category, .bid-location, .bid-date, .bid-bidders {
       font-size: 12px;
       color: #888;
@@ -161,22 +156,6 @@
 
     .view-more:hover {
       background-color: #852cc5;
-    }
-
-    .place-bid {
-      background-color: #1f8e4c;
-      color: black;
-      border: none;
-      padding: 10px 14px;
-      cursor: pointer;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-
-    .place-bid:hover {
-      background-color: #25a95c;
     }
 
     .item-expanded {
@@ -223,7 +202,7 @@
     }
 
     .place-bid-btn {
-      background-color: #1f8e4c;
+      background-color: #690f7d;
       color: white;
       border: none;
       padding: 10px;
@@ -234,14 +213,7 @@
     }
 
     .place-bid-btn:hover {
-      background-color: #25a95c;
-    }
-
-    .bid-form-container {
-      display: none;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #333;
+      background-color: #852cc5;
     }
 
     .footer {
@@ -309,10 +281,7 @@
             <div class="bid-details">
               <h2>${product.name}</h2>
             </div>
-            <div class="bid-actions">
-              <button class="view-more" onclick="toggleDetails(${index})">View More</button>
-              <button class="place-bid" onclick="toggleBidForm(${index})">Place Bid</button>
-            </div>
+            <button class="view-more" onclick="toggleDetails(${index})">View More</button>
           </div>
         `;
 
@@ -340,19 +309,14 @@
                 <span class="info-value">${product.bidders?.join(", ") || "None"}</span>
               </div>
             </div>
-          </div>
-        `;
-
-        const bidFormHtml = `
-          <div class="bid-form-container" id="bid-form-${index}">
             <div class="bid-form">
               <input type="text" class="bid-input" id="bid-amount-${index}" placeholder="Enter your bid amount (e.g. $400)">
-              <button class="place-bid-btn" onclick="placeBid(${index})">Submit Bid</button>
+              <button class="place-bid-btn" onclick="placeBid(${index})">Place Bid</button>
             </div>
           </div>
         `;
 
-        item.innerHTML = headerHtml + expandedHtml + bidFormHtml;
+        item.innerHTML = headerHtml + expandedHtml;
         bidList.appendChild(item);
       });
     }
@@ -367,22 +331,6 @@
           expandedElement.style.display = "none";
         } else {
           expandedElement.style.display = "block";
-        }
-      }
-    }
-
-    function toggleBidForm(index) {
-      const product = getProducts()[index];
-      if (product.file && product.file !== "") {
-        window.location.href = product.file;
-      } else {
-        const bidFormElement = document.getElementById(`bid-form-${index}`);
-        if (bidFormElement.style.display === "block") {
-          bidFormElement.style.display = "none";
-        } else {
-          bidFormElement.style.display = "block";
-          // Auto-expand details when showing bid form
-          document.getElementById(`expanded-${index}`).style.display = "block";
         }
       }
     }
@@ -433,7 +381,6 @@
       
       // Keep the item expanded
       document.getElementById(`expanded-${index}`).style.display = "block";
-      document.getElementById(`bid-form-${index}`).style.display = "block";
     }
 
     // For demo purposes - set a username
