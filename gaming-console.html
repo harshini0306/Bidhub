@@ -55,51 +55,78 @@
     </div>
 
     <script>
-        function countdown() {
-            let endDate = new Date("May 01, 2025 23:59:59").getTime();
-            setInterval(function() {
-                let now = new Date().getTime();
-                let timeLeft = endDate - now;
-                let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
-            }, 1000);
-        }
-        countdown();
+    function countdown() {
+        let endDate = new Date("May 01, 2025 23:59:59").getTime();
+        setInterval(function () {
+            let now = new Date().getTime();
+            let timeLeft = endDate - now;
+            let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("countdown").innerHTML = days + " days, " + hours + " hours";
+        }, 1000);
+    }
+    countdown();
 
-        function placeBid() {
-            let bidAmount = parseInt(document.getElementById("bidInput").value);
-            let currentBidElement = document.getElementById("current-bid");
-            let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
-            let bidHistory = document.getElementById("bid-history");
-
-            if (isNaN(bidAmount) || bidAmount <= currentBid) {
-                alert("⚠️ Your bid must be higher than $" + currentBid);
-                return;
-            }
-
-            // Update current bid
-            currentBidElement.innerText = "$" + bidAmount;
-
-            // Add new bid to history
-            let newBid = document.createElement("li");
-            newBid.innerHTML = `💰 $${bidAmount} - You (just now)`;
-            bidHistory.prepend(newBid);
-
-            alert("✅ Bid placed successfully!");
+    // Load data from localStorage
+    window.onload = function () {
+        let savedBid = localStorage.getItem("currentBid");
+        if (savedBid) {
+            document.getElementById("current-bid").innerText = "$" + savedBid;
         }
 
-        function downloadBidHistory() {
-            let bidHistory = document.getElementById("bid-history").innerHTML;
-            let text = bidHistory.replace(/<li>/g, '').replace(/<\/li>/g, '\n');
-            let blob = new Blob([text], { type: "text/plain" });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "bid_history.txt";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        let savedHistory = JSON.parse(localStorage.getItem("bidHistory"));
+        if (savedHistory && savedHistory.length > 0) {
+            let bidHistoryList = document.getElementById("bid-history");
+            bidHistoryList.innerHTML = ""; // clear old list
+            savedHistory.forEach(entry => {
+                let li = document.createElement("li");
+                li.innerHTML = entry;
+                bidHistoryList.appendChild(li);
+            });
         }
-    </script>
+    };
+
+    function placeBid() {
+        let bidAmount = parseInt(document.getElementById("bidInput").value);
+        let currentBidElement = document.getElementById("current-bid");
+        let currentBid = parseInt(currentBidElement.innerText.replace("$", ""));
+        let bidHistory = document.getElementById("bid-history");
+
+        if (isNaN(bidAmount) || bidAmount <= currentBid) {
+            alert("⚠️ Your bid must be higher than $" + currentBid);
+            return;
+        }
+
+        // Update current bid
+        currentBidElement.innerText = "$" + bidAmount;
+        localStorage.setItem("currentBid", bidAmount); // save to localStorage
+
+        // Create new bid entry
+        let newBidHTML = `💰 $${bidAmount} - You (just now)`;
+        let newBid = document.createElement("li");
+        newBid.innerHTML = newBidHTML;
+        bidHistory.prepend(newBid);
+
+        // Save updated bid history
+        let allBids = Array.from(bidHistory.children).map(li => li.innerHTML);
+        localStorage.setItem("bidHistory", JSON.stringify(allBids));
+
+        alert("✅ Bid placed successfully!");
+        document.getElementById("bidInput").value = "";
+    }
+
+    function downloadBidHistory() {
+        let bidHistory = document.getElementById("bid-history").innerHTML;
+        let text = bidHistory.replace(/<li>/g, '').replace(/<\/li>/g, '\n');
+        let blob = new Blob([text], { type: "text/plain" });
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "bid_history.txt";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
 </body>
 </html>
