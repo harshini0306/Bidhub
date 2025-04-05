@@ -187,7 +187,8 @@
     function initializeItems() {
       if (!localStorage.getItem("initialized")) {
         const defaultItems = [
-           { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
+          { name: "Designer Chair", bid: "$750", category: "FURNITURE", file: "designer-chair.html", location: "New York", date: "2025-04-10", image: "", bidders: ["Alice", "Bob"] },
+          { name: "Gaming Console", bid: "$380", category: "ELECTRONICS", file: "gaming-console.html", location: "LA", date: "2025-04-15", image: "", bidders: ["Carol"] },
           { name: "Vinyl Collection", bid: "$520", category: "MUSIC", file: "vintage-vinyl.html", location: "Berlin", date: "2025-05-01", image: "", bidders: ["Dave"] },
           { name: "Handcrafted Vase", bid: "$280", category: "HOME DECOR", file: "handmade-potteery.html", location: "Delhi", date: "2025-05-12", image: "", bidders: ["Eve"] },
           { name: "Designer Handbag", bid: "$1,700", category: "FASHION", file: "handbag.html", location: "London", date: "2025-05-20", image: "", bidders: [] },
@@ -210,12 +211,32 @@
       products.forEach((product, index) => {
         const item = document.createElement("div");
         item.classList.add("bid-item");
-        item.innerHTML = `
-  <div class="bid-details">
-    <h2>${product.name}</h2>
-  </div>
-  <button class="view-more" onclick="viewMore(${index})">View More</button>
-`;
+        
+        const details = document.createElement("div");
+        details.classList.add("bid-details");
+        details.innerHTML = `<h2>${product.name}</h2>`;
+        
+        if (product.category) {
+          const category = document.createElement("span");
+          category.classList.add("bid-category");
+          category.textContent = product.category;
+          details.appendChild(category);
+        }
+        
+        if (product.location) {
+          const location = document.createElement("span");
+          location.classList.add("bid-location");
+          location.textContent = ` | ${product.location}`;
+          details.appendChild(location);
+        }
+        
+        item.appendChild(details);
+        
+        const viewBtn = document.createElement("button");
+        viewBtn.classList.add("view-more");
+        viewBtn.textContent = "View More";
+        viewBtn.onclick = function() { viewMore(index); };
+        item.appendChild(viewBtn);
 
         bidList.appendChild(item);
       });
@@ -235,9 +256,19 @@
       }
     }
 
+    // Check for updates in localStorage
+    function checkForUpdates() {
+      renderBids();
+      // Check every 2 seconds for updates to the products in localStorage
+      setTimeout(checkForUpdates, 2000);
+    }
+
     // Initialize only once
     initializeItems();
     renderBids();
+    
+    // Start checking for updates
+    checkForUpdates();
   </script>
   <footer class="footer">
     © 2025 BidHub. All rights reserved.
