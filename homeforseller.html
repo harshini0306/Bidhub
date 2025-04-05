@@ -161,12 +161,18 @@
 
     <!-- Add Item Form -->
     <div class="form-container" id="formContainer">
-      <input type="text" id="name" placeholder="Item Name">
-      <input type="text" id="bid" placeholder="Starting Bid (e.g. $500)">
-      <input type="text" id="category" placeholder="Category">
-      <input type="text" id="file" placeholder="File (e.g. chair.html)">
-      <button onclick="saveItem()">Submit</button>
-    </div>
+  <input type="text" id="name" placeholder="Item Name">
+  <input type="text" id="bid" placeholder="Starting Bid (e.g. $500)">
+  <input type="text" id="category" placeholder="Category">
+
+  <!-- New Fields -->
+  <input type="file" id="picture" accept="image/*">
+  <input type="date" id="endDate" placeholder="End Date">
+  <input type="text" id="location" placeholder="Location">
+
+  <button onclick="addItem()">Add Item</button>
+</div>
+
 
     <!-- Sell Popup -->
     <div class="form-container" id="sellPopup">
